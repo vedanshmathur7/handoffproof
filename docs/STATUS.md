@@ -14,6 +14,8 @@
 - Task 00 passed its documentation, task-presence, placeholder-presence, and terminology checks.
 - Task 01 created locked Python/Node environments, FastAPI, React, PostgreSQL Compose, root commands, and an honest UI shell.
 - `GET /health` verifies both the API process and a real PostgreSQL connection.
+- Private GitHub repository `vedanshmathur7/handoffproof` tracks the project, and CI
+  runs the backend and frontend checks on every push and pull request.
 
 ## In progress
 
@@ -36,6 +38,7 @@
 - Docker Compose PostgreSQL: healthy.
 - Real `GET /health`: HTTP 200 with process and database both `ready`.
 - Browser inspection: HandoffProof heading and the empty-state message rendered correctly.
+- GitHub Actions CI run #1: passed in 33 seconds for commit `8aeb7a2`.
 
 ## Next three actions
 

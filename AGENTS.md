@@ -39,6 +39,9 @@ This repository builds a portfolio-grade SaaS that verifies whether lead handoff
 5. Report changed files, checks, failures, and remaining risk.
 6. When a phase finishes, add its simple explanation, technical flow, examples,
    concepts, and self-study search terms to `docs/LEARNING_GUIDE.md`.
+7. After checks pass and handoff documents are current, commit the completed task
+   with a descriptive message and push it to `origin/main`. If an active task uses
+   a review branch, push that branch and keep its pull request current instead.
 
 ## Forbidden shortcuts
 
