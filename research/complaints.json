@@ -1,0 +1,502 @@
+[
+  {
+    "id": "C01",
+    "category": "Automation",
+    "title": "Airtable timeout creates duplicate records",
+    "author": "Darien_Kindlund, n8n user",
+    "date": "2024-04-26",
+    "url": "https://community.n8n.io/t/expose-configurable-timeout-for-airtable-nodes/45062",
+    "observation": "A create/update request reportedly completed remotely after timing out; retry then created another record.",
+    "reported_frequency": "Intermittent, reported by author",
+    "evidence_grade": "B",
+    "caveat": "Historical version-specific report; proposed longer timeout does not guarantee idempotency.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C02",
+    "category": "Automation",
+    "title": "Rate-limited customer API receives duplicate calls",
+    "author": "Kabrooks, n8n user",
+    "date": "2026-08-20",
+    "url": "https://community.n8n.io/t/handle-api-rate-limits-and-retries-in-n8n-without-creating-duplicate-requests/308652",
+    "observation": "During heavy traffic, retrying 429 responses reportedly produced duplicate customer/order calls; author considered a PostgreSQL state queue.",
+    "reported_frequency": "During heavy traffic",
+    "evidence_grade": "B",
+    "caveat": "No version or verified business loss; distinguish duplicate calls from duplicate committed records.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C03",
+    "category": "Automation",
+    "title": "Worker restarts replay old jobs",
+    "author": "Decoure_Ryan, n8n user",
+    "date": "2026-05-20",
+    "url": "https://community.n8n.io/t/workflow-randomly-reprocessing-old-queue-jobs-after-worker-restart/296374",
+    "observation": "Queue workers reportedly repeated database writes and external calls after restart despite basic retries.",
+    "reported_frequency": "After some worker restarts",
+    "evidence_grade": "B",
+    "caveat": "Standard at-least-once recovery can explain this; not proof of a missing platform capability.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C04",
+    "category": "Automation",
+    "title": "Scheduled Metabase-to-HubSpot sync stops after a small subset",
+    "author": "m.s, n8n user",
+    "date": "2026-01-12",
+    "url": "https://community.n8n.io/t/my-n8n-workflow-metabase-hubspot-contact-sync-stops-mid-run-often-at-a-wait-node-and-fails-without-a-clear-error-message-so-only-a-small-subset-of-items-gets-processed/248864",
+    "observation": "Around 1,912 source items were expected; the author reports roughly 19–20 loop iterations before stopping and rejects a reply that misread the workflow.",
+    "reported_frequency": "Repeated over preceding days",
+    "evidence_grade": "B",
+    "caveat": "UI showed an error; this is partial completion, not a silent-success example. Root cause not reproduced.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 7,
+      "willingness_to_pay_hypothesis": 6,
+      "competitive_headroom": 4,
+      "three_person_buildability": 8
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C05",
+    "category": "Automation",
+    "title": "Telegram trigger stops without logged attempts",
+    "author": "Mikhail1, n8n user",
+    "date": "2025-03-19",
+    "url": "https://community.n8n.io/t/telegram-trigger-not-working/90054",
+    "observation": "Self-hosted trigger reportedly needed toggling after half a day or a day, with no trigger attempts visible.",
+    "reported_frequency": "Approximately every 12–24 hours in reported setup",
+    "evidence_grade": "B",
+    "caveat": "Old version; current defect status unknown. Heartbeat/synthetic monitoring is an existing alternative.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 8,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 8
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C06",
+    "category": "Automation",
+    "title": "Cloud Telegram trigger stops despite daily workaround",
+    "author": "Laura_Cobo, n8n user",
+    "date": "2025-05-26",
+    "url": "https://community.n8n.io/t/telegram-trigger-stops-receiving-messages-after-12-24-hours-n8n-cloud/121004",
+    "observation": "Cloud trigger reportedly stopped after 12–24 hours; daily webhook re-registration had not removed the issue.",
+    "reported_frequency": "Approximately daily in reported setup",
+    "evidence_grade": "B",
+    "caveat": "May share an underlying failure class with C05; not two independent market segments.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 8,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 8
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C07",
+    "category": "Automation",
+    "title": "Contact upsert errors on an existing HubSpot contact",
+    "author": "alek_31415, n8n user",
+    "date": "2025-10-31",
+    "url": "https://community.n8n.io/t/hubspot-upsert-bug/214405",
+    "observation": "An upsert reportedly returned CONTACT_EXISTS instead of updating an existing contact.",
+    "reported_frequency": "Conditional on existing contact; volume unknown",
+    "evidence_grade": "B",
+    "caveat": "Configuration was suggested but no confirmed root cause; could be solved with a workflow change.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 8
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C08",
+    "category": "Automation",
+    "title": "Agent passes five inputs to the wrong one-input tool",
+    "author": "Ahn_Michael, client-work builder",
+    "date": "2026-04-22",
+    "url": "https://community.n8n.io/t/agent-not-using-correct-tools-and-sending-wrong-mismatched-inputs/290395",
+    "observation": "A seven-tool agent reportedly began using a wrong form tool despite prompt changes, causing schema errors.",
+    "reported_frequency": "Repeated attempts on report day",
+    "evidence_grade": "B",
+    "caveat": "Reply claiming corrupted internal schema was disputed; do not treat that explanation as fact.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C09",
+    "category": "Automation",
+    "title": "Subworkflow tool schemas reject agent input",
+    "author": "Mik3e, n8n user",
+    "date": "2025-05-06",
+    "url": "https://community.n8n.io/t/exception-received-tool-input-did-not-match-expected-schema-no-name-field-in-subworkflow-tool-node/111405",
+    "observation": "Author reports frequent schema errors and notices tool node version differences while investigating missing name fields.",
+    "reported_frequency": "Quite often, unquantified",
+    "evidence_grade": "B",
+    "caveat": "Historical tool versions; symptom supports testing need, not proof of an unsolved 2026 bug.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C10",
+    "category": "Automation",
+    "title": "MCP connection succeeds but agent returns generic/wrong information",
+    "author": "n8n forum poster",
+    "date": "2026-05, thread publication",
+    "url": "https://community.n8n.io/t/mcp-server-returns-wrong-generic-responses-in-n8n-chat/295948",
+    "observation": "The same YouTrack MCP query reportedly worked in another client while n8n returned unrelated capabilities without obvious execution errors.",
+    "reported_frequency": "Unknown",
+    "evidence_grade": "B",
+    "caveat": "Could be model, tool-description or client configuration issue; broad model correctness is outside proposed MVP.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 5,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 5
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C11",
+    "category": "Automation",
+    "title": "Twelve client workflows; bad outputs and noisy alerts",
+    "author": "Specialist-Abies-909, self-described client operator",
+    "date": "2026-05 approximate; relative age on opened page",
+    "url": "https://www.reddit.com/r/n8n/comments/1t3v13b/losing_sleep_over_client_workflows_breaking/",
+    "observation": "Author reports learning about incorrect outputs from clients, and says paid observability feels excessive for a solo setup.",
+    "reported_frequency": "Recurring, unquantified",
+    "evidence_grade": "B",
+    "caveat": "Evidence AGAINST easy willingness-to-pay as well as for pain. Includes semantic failures that record matching cannot detect.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 3,
+      "competitive_headroom": 3,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C12",
+    "category": "Automation",
+    "title": "Client finds an empty dashboard after four days",
+    "author": "tidy_allies, Reddit commenter",
+    "date": "2026-09 approximate; indexed/opened relative dates differ",
+    "url": "https://www.reddit.com/r/n8n/comments/1w75q6m/how_did_you_find_out_an_n8n_workflow_silently/",
+    "observation": "Commenter reports downstream people usually notice; one client dashboard was empty for four days.",
+    "reported_frequency": "One specific event; general recurrence claimed",
+    "evidence_grade": "B",
+    "caveat": "No financial loss verified. Same discussion cluster as C13; do not count as independent thread.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 5,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 8
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C13",
+    "category": "Automation",
+    "title": "Delivery driver receives a blank label",
+    "author": "ColeJDMaffeo, Reddit commenter",
+    "date": "2026-09 approximate; indexed/opened relative dates differ",
+    "url": "https://www.reddit.com/r/n8n/comments/1w75q6m/how_did_you_find_out_an_n8n_workflow_silently/",
+    "observation": "A missing message field reportedly produced a blank label despite successful runs; remediation took an afternoon.",
+    "reported_frequency": "One event reported",
+    "evidence_grade": "B",
+    "caveat": "Author says a required-field check fixed it; strong counterexample to need for a new SaaS.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 3,
+      "willingness_to_pay_hypothesis": 3,
+      "competitive_headroom": 2,
+      "three_person_buildability": 9
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C14",
+    "category": "Finance",
+    "title": "Daily remittance inbox work for 50+ payments",
+    "author": "Fluid-Culture-913, adviser describing a client",
+    "date": "2026-04-10",
+    "url": "https://www.reddit.com/r/Accounting/comments/1shs19y/help_applying_50_payments_to_invoices_everyday_is/",
+    "observation": "Oil-and-gas client reportedly receives 50+ ACH/wire payments daily; staff retrieve remittance details manually for Business Central matching.",
+    "reported_frequency": "Daily; 50+ payments/day self-reported",
+    "evidence_grade": "B",
+    "caveat": "Client is unnamed; product-promoting replies are not independent buyers. Existing cash-application products address this.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 9,
+      "willingness_to_pay_hypothesis": 7,
+      "competitive_headroom": 3,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C15",
+    "category": "Finance",
+    "title": "One payment, several invoices, ambiguous discounts",
+    "author": "Self-described QBO cash-application worker",
+    "date": "2026-07-01",
+    "url": "https://www.reddit.com/r/AskAccounting/comments/1ukrvrs/two_questions_about_applying_one_payment_across/",
+    "observation": "Worker asks how to allocate a bundled discount and hand off short-pay deductions across several invoices.",
+    "reported_frequency": "Recurring situations, volume unknown",
+    "evidence_grade": "B",
+    "caveat": "Partly an accounting-policy question; software cannot invent the customer's approved allocation policy.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 7,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C16",
+    "category": "Finance",
+    "title": "Shopify sales and payouts do not tie",
+    "author": "Shopify bookkeeping poster",
+    "date": "2025-06-02",
+    "url": "https://www.reddit.com/r/Accounting/comments/1l1hbuj/shopify_accounting/",
+    "observation": "Poster has difficulty tying reported sales to payouts; an accounting-firm commenter describes using A2X for payout-based entries.",
+    "reported_frequency": "Recurring reconciliation",
+    "evidence_grade": "B",
+    "caveat": "Replies explain fees/timing and recommend an existing tool; evidence of existing solution, not market vacancy.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 7,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 2,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C17",
+    "category": "Finance",
+    "title": "Bookkeepers record bundled Shopify deposits inadequately",
+    "author": "Small merchant using QBO, self-described",
+    "date": "2026-07-29",
+    "url": "https://www.reddit.com/r/AskAccounting/comments/1vaab8h/any_bookkeeping_service_that_handles_shopify/",
+    "observation": "Merchant says they cross-check payouts manually monthly and wants a reasonably priced bookkeeping service.",
+    "reported_frequency": "Monthly",
+    "evidence_grade": "B",
+    "caveat": "Explicit search for paid help, but budget-sensitive and possibly a service-quality issue; identity unverified.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 7,
+      "willingness_to_pay_hypothesis": 6,
+      "competitive_headroom": 2,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C18",
+    "category": "Finance",
+    "title": "Partial refunds and processor adjustments do not reconcile",
+    "author": "Shopify-growth poster",
+    "date": "2026-03-11",
+    "url": "https://www.reddit.com/r/shopify_growth/comments/1rqxjzm/anyone_else_struggling_to_reconcile_refunds/",
+    "observation": "Poster reports mismatches involving partial refunds, shipping adjustments and processor fees.",
+    "reported_frequency": "Recurring, unquantified",
+    "evidence_grade": "B",
+    "caveat": "Low-engagement discussion; later promotional replies excluded. Many existing ecommerce accounting tools.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 2,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C19",
+    "category": "Code",
+    "title": "AI dependency replaces internal understanding of a codebase",
+    "author": "HN commenter",
+    "date": "2025 approximate; indexed age",
+    "url": "https://news.ycombinator.com/item?id=44290407",
+    "observation": "Commenter describes losing an internal mental map and depending on AI to understand code well enough to debug.",
+    "reported_frequency": "Ongoing subjective experience",
+    "evidence_grade": "C",
+    "caveat": "Only indexed excerpt available; direct open failed. No buyer, team budget or measured loss established.",
+    "scores": {
+      "pain": 5,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 3,
+      "competitive_headroom": 2,
+      "three_person_buildability": 4
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C20",
+    "category": "Code",
+    "title": "Large AI PRs pass basic checks but conflict with architecture",
+    "author": "Quoted original poster and reviewers, ExperiencedDevs",
+    "date": "2025-07-08",
+    "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1luckko/removed/",
+    "observation": "Surviving comments describe code as much longer than needed and difficult to review for architectural coherence.",
+    "reported_frequency": "Recurring PR review, self-reported",
+    "evidence_grade": "C",
+    "caveat": "Original post removed; claim survives in a quotation. Does not establish universal quality degradation.",
+    "scores": {
+      "pain": 7,
+      "frequency_hypothesis": 8,
+      "willingness_to_pay_hypothesis": 6,
+      "competitive_headroom": 3,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C21",
+    "category": "Code",
+    "title": "Experienced developers question long-term AI-code quality",
+    "author": "ExperiencedDevs discussion author",
+    "date": "2026-04-01",
+    "url": "https://www.reddit.com/r/ExperiencedDevs/comments/1s9pkif/experienced_teams_that_went_hard_on_ai_did_you/",
+    "observation": "Author asks whether teams accepting more AI-written code have lowered maintainability standards and increased review work.",
+    "reported_frequency": "Concern, not quantified incident frequency",
+    "evidence_grade": "B",
+    "caveat": "Primarily a question/opinion; not evidence of a purchasing decision.",
+    "scores": {
+      "pain": 6,
+      "frequency_hypothesis": 6,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 2,
+      "three_person_buildability": 5
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C22",
+    "category": "Documentation",
+    "title": "Internal user guides need quarterly updates",
+    "author": "Self-described product manager",
+    "date": "2025-03-27",
+    "url": "https://www.reddit.com/r/ProductManagement/comments/1jl69ya/how_do_you_maintain_your_outdated_sops/",
+    "observation": "UI screenshots and instructions reportedly become outdated after roughly three months; updates depend on the author.",
+    "reported_frequency": "Approximately quarterly",
+    "evidence_grade": "B",
+    "caveat": "Author clarifies these are largely user manuals; ownership/process changes could solve much of it.",
+    "scores": {
+      "pain": 5,
+      "frequency_hypothesis": 5,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 3,
+      "three_person_buildability": 6
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C23",
+    "category": "Documentation",
+    "title": "Retiring employee holds undocumented operating details",
+    "author": "Frequent_Wave_9800, self-described new HR manager",
+    "date": "2025-06-28",
+    "url": "https://www.reddit.com/r/managers/comments/1lmssas/poor_sops_leading_to_mistakes_causing_anxiety_and/",
+    "observation": "Sparse SOPs and knowledge held by a retiring colleague reportedly contribute to data-entry mistakes and poor onboarding.",
+    "reported_frequency": "Ongoing; retirement adds urgency",
+    "evidence_grade": "B",
+    "caveat": "Human knowledge-capture and training problem; passive software cannot recover knowledge never recorded.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 7,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 5
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C24",
+    "category": "Automation",
+    "title": "Named operator reports losing a client after silent failures",
+    "author": "John Maina, LinkedIn author",
+    "date": "Exact date not verified; public indexed post accessed 2026-09-13",
+    "url": "https://www.linkedin.com/posts/john-mainam_i-lost-a-client-because-an-automation-didnt-activity-7491942871395254272-Io5k",
+    "observation": "Author claims dead credentials caused unnoticed failed automations and loss of a client.",
+    "reported_frequency": "One claimed client loss",
+    "evidence_grade": "C",
+    "caveat": "Repeated near-identical posts deduplicated. Promotional framing, no contract or logs verified; do not generalize.",
+    "scores": {
+      "pain": 8,
+      "frequency_hypothesis": 5,
+      "willingness_to_pay_hypothesis": 5,
+      "competitive_headroom": 3,
+      "three_person_buildability": 7
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  },
+  {
+    "id": "C25",
+    "category": "Security",
+    "title": "curl maintainer overwhelmed by valid security-report volume",
+    "author": "Daniel Stenberg, named curl founder/maintainer",
+    "date": "2026-05-26",
+    "url": "https://daniel.haxx.se/blog/2026/05/26/",
+    "observation": "Maintainer describes sustained verification and patching workload as incoming report quality rises.",
+    "reported_frequency": "Ongoing, more than daily self-reported",
+    "evidence_grade": "A",
+    "caveat": "Updates the older junk-report narrative. Maintainer burden does not establish budget for a separate triage SaaS.",
+    "scores": {
+      "pain": 9,
+      "frequency_hypothesis": 9,
+      "willingness_to_pay_hypothesis": 4,
+      "competitive_headroom": 3,
+      "three_person_buildability": 4
+    },
+    "score_basis": "Analyst prioritization, not measured market facts. Buildability means a narrow intervention, not a universal solution."
+  }
+]

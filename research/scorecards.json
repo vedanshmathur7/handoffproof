@@ -1,0 +1,589 @@
+{
+  "date": "2026-09-13",
+  "scale": "1–10, higher is better. Competitive headroom is inverse crowding. Scores are subjective, not probabilities.",
+  "weights": {
+    "pain": 10,
+    "frequency": 7,
+    "economic_value": 10,
+    "willingness_to_pay": 12,
+    "buyer_clarity": 8,
+    "market_size": 5,
+    "competitive_headroom": 4,
+    "competitive_gap": 8,
+    "differentiation": 6,
+    "buildability": 10,
+    "gtm": 8,
+    "retention": 5,
+    "defensibility": 4,
+    "ai_leverage": 2,
+    "timing": 1
+  },
+  "formula": "sum(score[factor] * weight[factor]) / 100",
+  "selection_rule": "Rank only after founder fit, evidence and scope gates; high numerical scores do not override infeasible scope.",
+  "ideas": [
+    {
+      "id": "R01",
+      "name": "Lead handoff reconciliation for HubSpot automation agencies",
+      "scores": {
+        "pain": 8,
+        "frequency": 7,
+        "economic_value": 7,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 8,
+        "market_size": 5,
+        "competitive_headroom": 3,
+        "competitive_gap": 5,
+        "differentiation": 6,
+        "buildability": 8,
+        "gtm": 7,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 3,
+        "timing": 7
+      },
+      "weighted_score": 6.5,
+      "decision": "Validate first",
+      "rationale": "Reconcile source submissions against destination records; easiest bounded test and identifiable agency buyer. Independent read-back advantage is unproven.",
+      "evidence": [
+        "C01",
+        "C04",
+        "C07",
+        "C11",
+        "C12",
+        "S04",
+        "S19"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R02",
+      "name": "Remittance exception preparation for Business Central teams",
+      "scores": {
+        "pain": 8,
+        "frequency": 9,
+        "economic_value": 8,
+        "willingness_to_pay": 7,
+        "buyer_clarity": 8,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 4,
+        "differentiation": 4,
+        "buildability": 6,
+        "gtm": 4,
+        "retention": 8,
+        "defensibility": 6,
+        "ai_leverage": 7,
+        "timing": 7
+      },
+      "weighted_score": 6.5,
+      "decision": "Conditional second choice",
+      "rationale": "Better frequency and budget logic, but crowded cash application and ERP/domain access make it harder for this team.",
+      "evidence": [
+        "C14",
+        "C15",
+        "S13",
+        "S14",
+        "S15"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R03",
+      "name": "Architecture contract enforcement for Python teams",
+      "scores": {
+        "pain": 7,
+        "frequency": 8,
+        "economic_value": 6,
+        "willingness_to_pay": 5,
+        "buyer_clarity": 8,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 4,
+        "buildability": 8,
+        "gtm": 5,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 4,
+        "timing": 7
+      },
+      "weighted_score": 5.9,
+      "decision": "Reserve option",
+      "rationale": "Scoped deterministic rules are buildable; Import Linter and CodeScene already cover much of the proposed value.",
+      "evidence": [
+        "C20",
+        "C21",
+        "S11",
+        "S12"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R04",
+      "name": "Generic AI exception manager",
+      "scores": {
+        "pain": 8,
+        "frequency": 7,
+        "economic_value": 7,
+        "willingness_to_pay": 5,
+        "buyer_clarity": 5,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 4,
+        "gtm": 4,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 6,
+        "timing": 8
+      },
+      "weighted_score": 5.3,
+      "decision": "Reject broad scope",
+      "rationale": "Undefined exceptions hide many integrations, permissions and business-specific resolution policies.",
+      "evidence": [
+        "S02",
+        "S03",
+        "S04"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R05",
+      "name": "Real workflow discovery",
+      "scores": {
+        "pain": 7,
+        "frequency": 7,
+        "economic_value": 7,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 7,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 3,
+        "gtm": 3,
+        "retention": 7,
+        "defensibility": 5,
+        "ai_leverage": 6,
+        "timing": 6
+      },
+      "weighted_score": 5.3,
+      "decision": "Defer",
+      "rationale": "Existing process mining and need for event access/context make a broad discovery platform difficult.",
+      "evidence": [
+        "C22",
+        "C23",
+        "S26"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R06",
+      "name": "Generic agent crash testing",
+      "scores": {
+        "pain": 8,
+        "frequency": 8,
+        "economic_value": 7,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 8,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 6,
+        "gtm": 4,
+        "retention": 8,
+        "defensibility": 4,
+        "ai_leverage": 7,
+        "timing": 8
+      },
+      "weighted_score": 6,
+      "decision": "Reject generic platform",
+      "rationale": "Braintrust documents replay-style datasets, stubbing, evaluations and production monitoring.",
+      "evidence": [
+        "C08",
+        "C09",
+        "S09",
+        "S10"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R07",
+      "name": "Universal AI workflow rollback",
+      "scores": {
+        "pain": 9,
+        "frequency": 6,
+        "economic_value": 9,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 6,
+        "market_size": 7,
+        "competitive_headroom": 3,
+        "competitive_gap": 4,
+        "differentiation": 4,
+        "buildability": 2,
+        "gtm": 3,
+        "retention": 8,
+        "defensibility": 6,
+        "ai_leverage": 5,
+        "timing": 7
+      },
+      "weighted_score": 5.7,
+      "decision": "Reject universal promise",
+      "rationale": "External side effects need connector-specific compensation and may be irreversible.",
+      "evidence": [
+        "C01",
+        "C03",
+        "S28"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R08",
+      "name": "Human approval optimizer",
+      "scores": {
+        "pain": 7,
+        "frequency": 8,
+        "economic_value": 6,
+        "willingness_to_pay": 5,
+        "buyer_clarity": 6,
+        "market_size": 7,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 5,
+        "gtm": 4,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 6,
+        "timing": 7
+      },
+      "weighted_score": 5.3,
+      "decision": "Defer",
+      "rationale": "Reliable risk gating needs organization policy; approval UI alone is easy to copy.",
+      "evidence": [
+        "S09",
+        "S27"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R09",
+      "name": "Generic CRM/ERP/spreadsheet reconciliation",
+      "scores": {
+        "pain": 8,
+        "frequency": 9,
+        "economic_value": 8,
+        "willingness_to_pay": 7,
+        "buyer_clarity": 7,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 3,
+        "gtm": 4,
+        "retention": 8,
+        "defensibility": 6,
+        "ai_leverage": 5,
+        "timing": 6
+      },
+      "weighted_score": 6,
+      "decision": "Narrow before building",
+      "rationale": "Economic pain exists; generic schema matching and competing sources of truth expand scope rapidly.",
+      "evidence": [
+        "C14",
+        "C16",
+        "S18",
+        "S19"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R10",
+      "name": "Agent/RAG permissions and governance",
+      "scores": {
+        "pain": 9,
+        "frequency": 8,
+        "economic_value": 9,
+        "willingness_to_pay": 7,
+        "buyer_clarity": 8,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 3,
+        "gtm": 3,
+        "retention": 9,
+        "defensibility": 6,
+        "ai_leverage": 4,
+        "timing": 8
+      },
+      "weighted_score": 6.1,
+      "decision": "Defer",
+      "rationale": "High stakes and clear security buyer, but trust, enterprise sales and existing authorization systems dominate.",
+      "evidence": [
+        "S23",
+        "S27"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R11",
+      "name": "Legacy enterprise UI automation layer",
+      "scores": {
+        "pain": 8,
+        "frequency": 8,
+        "economic_value": 8,
+        "willingness_to_pay": 7,
+        "buyer_clarity": 7,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 2,
+        "gtm": 3,
+        "retention": 8,
+        "defensibility": 5,
+        "ai_leverage": 7,
+        "timing": 6
+      },
+      "weighted_score": 5.7,
+      "decision": "Defer",
+      "rationale": "Large compatibility surface and fragile external UI state exceed a small first product.",
+      "evidence": [
+        "S25"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R12",
+      "name": "Employee decision and knowledge memory",
+      "scores": {
+        "pain": 6,
+        "frequency": 7,
+        "economic_value": 6,
+        "willingness_to_pay": 5,
+        "buyer_clarity": 6,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 5,
+        "gtm": 4,
+        "retention": 6,
+        "defensibility": 4,
+        "ai_leverage": 6,
+        "timing": 6
+      },
+      "weighted_score": 5.1,
+      "decision": "Defer",
+      "rationale": "Capture and maintenance ownership are harder than summarization; buyer and behavior change unproven.",
+      "evidence": [
+        "C22",
+        "C23",
+        "S26"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R13",
+      "name": "General code comprehension assistant",
+      "scores": {
+        "pain": 6,
+        "frequency": 8,
+        "economic_value": 6,
+        "willingness_to_pay": 4,
+        "buyer_clarity": 7,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 2,
+        "differentiation": 2,
+        "buildability": 7,
+        "gtm": 4,
+        "retention": 6,
+        "defensibility": 3,
+        "ai_leverage": 6,
+        "timing": 7
+      },
+      "weighted_score": 5.2,
+      "decision": "Reject generic assistant",
+      "rationale": "Developer dissatisfaction does not establish willingness to buy another explanation tool.",
+      "evidence": [
+        "C19",
+        "C20",
+        "S11"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R14",
+      "name": "Agent sprawl and cross-agent control plane",
+      "scores": {
+        "pain": 8,
+        "frequency": 8,
+        "economic_value": 8,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 6,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 2,
+        "gtm": 3,
+        "retention": 8,
+        "defensibility": 5,
+        "ai_leverage": 5,
+        "timing": 8
+      },
+      "weighted_score": 5.5,
+      "decision": "Defer",
+      "rationale": "Survey concern is not a measured integration failure; broad protocol and governance scope.",
+      "evidence": [
+        "S23"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R15",
+      "name": "AI-generated report verification",
+      "scores": {
+        "pain": 8,
+        "frequency": 8,
+        "economic_value": 7,
+        "willingness_to_pay": 4,
+        "buyer_clarity": 5,
+        "market_size": 6,
+        "competitive_headroom": 3,
+        "competitive_gap": 4,
+        "differentiation": 4,
+        "buildability": 3,
+        "gtm": 3,
+        "retention": 6,
+        "defensibility": 5,
+        "ai_leverage": 7,
+        "timing": 8
+      },
+      "weighted_score": 5.2,
+      "decision": "Reframe or defer",
+      "rationale": "Latest curl evidence includes good reports; reproducing claims matters more than detecting AI authorship.",
+      "evidence": [
+        "C25",
+        "S29",
+        "S30"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R16",
+      "name": "GummySearch-style idea validation",
+      "scores": {
+        "pain": 5,
+        "frequency": 5,
+        "economic_value": 4,
+        "willingness_to_pay": 4,
+        "buyer_clarity": 7,
+        "market_size": 6,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 6,
+        "gtm": 5,
+        "retention": 4,
+        "defensibility": 2,
+        "ai_leverage": 6,
+        "timing": 5
+      },
+      "weighted_score": 4.5,
+      "decision": "Reject without licensed data route",
+      "rationale": "Closure demonstrates data-access dependence, not a free defensible market gap.",
+      "evidence": [
+        "S24"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R17",
+      "name": "Hiring skill verification",
+      "scores": {
+        "pain": 8,
+        "frequency": 8,
+        "economic_value": 8,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 7,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 4,
+        "gtm": 3,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 6,
+        "timing": 7
+      },
+      "weighted_score": 5.7,
+      "decision": "Insufficient evidence",
+      "rationale": "No direct buyer research here; adversarial testing and hiring validity need separate diligence.",
+      "evidence": [],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R18",
+      "name": "SOP drift detection",
+      "scores": {
+        "pain": 6,
+        "frequency": 6,
+        "economic_value": 6,
+        "willingness_to_pay": 5,
+        "buyer_clarity": 6,
+        "market_size": 7,
+        "competitive_headroom": 3,
+        "competitive_gap": 4,
+        "differentiation": 4,
+        "buildability": 5,
+        "gtm": 4,
+        "retention": 7,
+        "defensibility": 4,
+        "ai_leverage": 6,
+        "timing": 6
+      },
+      "weighted_score": 5.2,
+      "decision": "Defer",
+      "rationale": "Real maintenance pain; update workflows and decision ownership may outperform another tool.",
+      "evidence": [
+        "C22",
+        "C23"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    },
+    {
+      "id": "R19",
+      "name": "Autonomous visual E2E testing",
+      "scores": {
+        "pain": 7,
+        "frequency": 8,
+        "economic_value": 7,
+        "willingness_to_pay": 6,
+        "buyer_clarity": 8,
+        "market_size": 8,
+        "competitive_headroom": 2,
+        "competitive_gap": 3,
+        "differentiation": 3,
+        "buildability": 4,
+        "gtm": 3,
+        "retention": 8,
+        "defensibility": 4,
+        "ai_leverage": 7,
+        "timing": 7
+      },
+      "weighted_score": 5.6,
+      "decision": "Defer",
+      "rationale": "Cannot infer an opening from brittle CSS; Playwright already supports resilient locators.",
+      "evidence": [
+        "S25"
+      ],
+      "confidence": "Low-to-moderate; no direct interviews or paid commitments"
+    }
+  ]
+}

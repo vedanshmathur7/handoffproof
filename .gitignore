@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local configuration and editor files
+.env
+.DS_Store
+.idea/
+.vscode/
+
+# Generated and private data
+coverage/
+.coverage
+*.log
+data/private/
+uploads/

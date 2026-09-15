@@ -1,0 +1,13 @@
+---
+description: Keep HandoffProof aligned with its active task and verified state
+alwaysApply: true
+---
+
+# Project workflow
+
+- Read `AGENTS.md`, `docs/STATUS.md`, and the active `tasks/*.md` first.
+- Treat code, migrations, configuration, and tests as source of truth.
+- Complete one task and its acceptance checks before starting another.
+- Keep the MVP read-only and matching deterministic.
+- Record incomplete data access as `unknown`, never `matched`.
+- Update status and the active checklist with verified facts only.

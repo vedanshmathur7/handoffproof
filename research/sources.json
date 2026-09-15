@@ -1,0 +1,266 @@
+[
+  {
+    "id": "S01",
+    "title": "Midwatch pricing",
+    "publisher": "Midwatch",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://midwatch.ai/pricing",
+    "used_for": "Vendor pricing: Solo $49/month; Agency $197/month. Not evidence of revenue."
+  },
+  {
+    "id": "S02",
+    "title": "Midwatch product",
+    "publisher": "Midwatch",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://midwatch.ai/",
+    "used_for": "Advertises cadence, silent-success and drift monitoring. Capability claims not independently tested."
+  },
+  {
+    "id": "S03",
+    "title": "FlowMonix product and pricing",
+    "publisher": "FlowMonix",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://flowmonix.com/",
+    "used_for": "Advertises incident grouping and retries; Free, Pro $29/month, Team $99/month."
+  },
+  {
+    "id": "S04",
+    "title": "YieldCue product",
+    "publisher": "YieldCue",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://yieldcue.com/",
+    "used_for": "Advertises outcome signals and incident routing; independent destination read-back not established by reviewed page."
+  },
+  {
+    "id": "S05",
+    "title": "YieldCue pricing",
+    "publisher": "YieldCue",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://yieldcue.com/pricing",
+    "used_for": "Monthly Solo $19, Starter $99, Pro $299."
+  },
+  {
+    "id": "S06",
+    "title": "Healthchecks.io plans",
+    "publisher": "Healthchecks.io",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://healthchecks.io/pricing/",
+    "used_for": "Free 20 jobs; Business $20/month; Business Plus $80/month."
+  },
+  {
+    "id": "S07",
+    "title": "All executions",
+    "publisher": "n8n documentation",
+    "date": "indexed snapshot; accessed 2026-09-13",
+    "url": "https://docs.n8n.io/workflows/executions/all-executions/",
+    "used_for": "Native retry with original or saved workflow and prior execution data."
+  },
+  {
+    "id": "S08",
+    "title": "n8n pricing",
+    "publisher": "n8n",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://n8n.io/pricing/",
+    "used_for": "Native execution logging, error workflows, insights and plan-specific features."
+  },
+  {
+    "id": "S09",
+    "title": "Evaluating agents",
+    "publisher": "Braintrust documentation",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://www.braintrust.dev/docs/best-practices/agents",
+    "used_for": "Historical datasets, stubs, code scorers and online/offline evaluations already documented."
+  },
+  {
+    "id": "S10",
+    "title": "Braintrust pricing",
+    "publisher": "Braintrust",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://www.braintrust.dev/pricing",
+    "used_for": "Starter free plus metered usage; Pro $249/month plus usage."
+  },
+  {
+    "id": "S11",
+    "title": "CodeScene pricing",
+    "publisher": "CodeScene",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://codescene.com/pricing",
+    "used_for": "Annual-billing displayed Standard EUR18 and Pro EUR27 per active author/month; code health and architecture features."
+  },
+  {
+    "id": "S12",
+    "title": "Import Linter contract types",
+    "publisher": "Import Linter documentation",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://import-linter.readthedocs.io/en/stable/contract_types/",
+    "used_for": "Forbidden, protected, layers, independence and acyclic-sibling contracts."
+  },
+  {
+    "id": "S13",
+    "title": "Cash Application Automation",
+    "publisher": "SK Global Software / Microsoft Marketplace",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://marketplace.microsoft.com/en-us/product/web-apps/pubid.sk-global-software%7Caid.e211c36d-a97e-4b3d-9fd2-93d6b02ed6c1%7Cpappid.ca7780cc-564b-4906-9336-8f3c0ec85f7c",
+    "used_for": "Native Business Central workbench, payment matching and receipt journals; price not verified."
+  },
+  {
+    "id": "S14",
+    "title": "Introducing AI-native cash application",
+    "publisher": "Monk",
+    "date": "2026, indexed approximately May; accessed 2026-09-13",
+    "url": "https://monk.com/blog/introducing-ai-native-cash-application",
+    "used_for": "Advertises rules, deterministic matching and LLM inference including Business Central; price not verified."
+  },
+  {
+    "id": "S15",
+    "title": "AR management with Microsoft Dynamics 365",
+    "publisher": "Kolleno",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://www.kolleno.com/ar-management-msdynamics365/",
+    "used_for": "Advertises Business Central cash application; named Sereni CFO testimonial; outcomes vendor-published, not independently audited."
+  },
+  {
+    "id": "S16",
+    "title": "Responses API",
+    "publisher": "Typeform documentation",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://www.typeform.com/developers/responses/",
+    "used_for": "Historical responses can be retrieved independently; latest roughly 30 minutes may not appear."
+  },
+  {
+    "id": "S17",
+    "title": "CRM search",
+    "publisher": "HubSpot documentation",
+    "date": "2026-03-30; accessed 2026-09-13",
+    "url": "https://developers.hubspot.com/docs/api-reference/legacy/crm/search-the-crm",
+    "used_for": "Search indexing lag and per-account limits; verify chosen API version before implementation."
+  },
+  {
+    "id": "S18",
+    "title": "Connect and use HubSpot data sync",
+    "publisher": "HubSpot knowledge base",
+    "date": "2026-07-15; accessed 2026-09-13",
+    "url": "https://knowledge.hubspot.com/integrations/connect-and-use-hubspot-data-sync",
+    "used_for": "Native one-way/two-way sync for supported integrations."
+  },
+  {
+    "id": "S19",
+    "title": "View the integrations sync card",
+    "publisher": "HubSpot knowledge base",
+    "date": "2025-11-17; accessed 2026-09-13",
+    "url": "https://knowledge.hubspot.com/integrations/view-the-integrations-sync-card",
+    "used_for": "Record-level native sync status; applies to listed integrations, not every arbitrary workflow."
+  },
+  {
+    "id": "S20",
+    "title": "AI and Process Automation Engineer",
+    "publisher": "Binalyze job advertisement",
+    "date": "publication date unavailable; accessed 2026-09-13",
+    "url": "https://jobs.ashbyhq.com/binalyze/d91705e5-c53d-4f1e-8b2f-a842349b1579/",
+    "used_for": "Company advertises work monitoring, measuring, documenting and iterating production automation. Hiring intent, not verified payroll."
+  },
+  {
+    "id": "S21",
+    "title": "AI Automation Engineer",
+    "publisher": "Pyyne job advertisement",
+    "date": "publication date unavailable; accessed 2026-09-13",
+    "url": "https://jobs.ashbyhq.com/Pyyne/11176bae-e8bf-4163-9f07-949941f80c84",
+    "used_for": "Client discovery, automation delivery and maintenance appear in same role. Hiring intent only."
+  },
+  {
+    "id": "S22",
+    "title": "Agentic Operator: Marketing Growth",
+    "publisher": "WeTravel job advertisement",
+    "date": "publication date unavailable; accessed 2026-09-13",
+    "url": "https://jobs.ashbyhq.com/wetravel/a9938fa9-2468-40de-a5f7-c703298973fb",
+    "used_for": "Operator role includes monitoring agent output and quality dips."
+  },
+  {
+    "id": "S23",
+    "title": "State of AI Development announcement",
+    "publisher": "OutSystems",
+    "date": "2026-04-07; accessed 2026-09-13",
+    "url": "https://www.outsystems.com/de-de/news/enterprise-ai-agent-report-2026",
+    "used_for": "94% concern about sprawl among surveyed organizations; 1,900 global IT leaders. Not 94% proven failed interoperability."
+  },
+  {
+    "id": "S24",
+    "title": "GummySearch service closure",
+    "publisher": "GummySearch",
+    "date": "timeline through 2026; accessed 2026-09-13",
+    "url": "https://gummysearch.com/docs/gummysearch-is-now-closed-6533h",
+    "used_for": "Unable to reach commercial Data API agreement; no new purchases/renewals since December 2025; full shutdown scheduled December 1 2026."
+  },
+  {
+    "id": "S25",
+    "title": "Locators",
+    "publisher": "Playwright documentation",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://playwright.dev/docs/locators",
+    "used_for": "Role, text, label and test-ID locators; CSS fragility is not a blanket limitation of Playwright."
+  },
+  {
+    "id": "S26",
+    "title": "Process discovery",
+    "publisher": "Celonis",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://www.celonis.com/insights/topics/what-is-process-discovery",
+    "used_for": "Process discovery and task mining are established product capabilities."
+  },
+  {
+    "id": "S27",
+    "title": "Authorization in RAG",
+    "publisher": "Oso",
+    "date": "2025-07-10; accessed 2026-09-13",
+    "url": "https://www.osohq.com/post/right-approach-to-authorization-in-rag",
+    "used_for": "Authorization vendor discusses permission-aware retrieval; not an unoccupied problem."
+  },
+  {
+    "id": "S28",
+    "title": "Saga compensation in TypeScript",
+    "publisher": "Temporal community; staff/sample guidance",
+    "date": "2022-11-02; accessed 2026-09-13",
+    "url": "https://community.temporal.io/t/support-for-saga-compensating-transactions-in-typescript/6392",
+    "used_for": "Explicit application-defined compensation, rather than universal external rollback."
+  },
+  {
+    "id": "S29",
+    "title": "The end of the curl bug-bounty",
+    "publisher": "Daniel Stenberg",
+    "date": "2026-01-26; accessed 2026-09-13",
+    "url": "https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/",
+    "used_for": "Bounty stopped January 31 2026; must be read with later evidence."
+  },
+  {
+    "id": "S30",
+    "title": "The pressure",
+    "publisher": "Daniel Stenberg",
+    "date": "2026-05-26; accessed 2026-09-13",
+    "url": "https://daniel.haxx.se/blog/2026/05/26/",
+    "used_for": "Later firsthand account describes higher-quality incoming security reports, not only junk."
+  },
+  {
+    "id": "S31",
+    "title": "Solid for HubSpot",
+    "publisher": "Solid",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://solid.tech/hubspot",
+    "used_for": "Advertises record reconciliation and sync repair across systems; direct adjacent competitor, untested."
+  },
+  {
+    "id": "S32",
+    "title": "AI cash application for Business Central",
+    "publisher": "ECOSIRE",
+    "date": "undated; accessed 2026-09-13",
+    "url": "https://ecosire.com/es/apps/dynamics-365-business-central/d365bc-ai-cash-application",
+    "used_for": "Build-to-order offer advertised from $499 one-time; indicative quote floor, not comparable SaaS cost."
+  },
+  {
+    "id": "S33",
+    "title": "The 88% that never ship",
+    "publisher": "Fieldway",
+    "date": "2026-06-16; accessed 2026-09-13",
+    "url": "https://fieldway.org/blog/the-88-that-never-ship-why-enterprise-ai-agents-die-in-pilot",
+    "used_for": "Secondary repetition of pilot statistics; excluded as quantitative decision evidence."
+  }
+]
