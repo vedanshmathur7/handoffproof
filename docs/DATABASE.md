@@ -1,24 +1,55 @@
 # Database contract
 
-## Planned entities
+Migration `eb584a4dd816` is authoritative for the initial PostgreSQL schema.
 
-- `workspaces`: tenant boundary.
-- `imports`: import metadata, coverage, checksum, and counts.
-- `observations`: normalized row and original evidence reference.
-- `rules`: immutable reconciliation rule versions.
-- `reconciliation_runs`: imports, rule, status, counts, and timestamps.
-- `reconciliation_results`: one classified result per eligible source observation.
-- `result_candidates`: destination candidates considered.
-- `reviews`: append-only human annotations.
-- Later `connectors` and `sync_jobs`: encrypted integration metadata and durable jobs.
+## Implemented entities
 
-## Invariants
+- `workspaces`: tenant boundary with UUID, name, and creation time.
+- `imports`: source/destination kind, file metadata, checksum, coverage, status,
+  and balanced accepted/rejected row counts.
+- `observations`: one normalized CSV row plus immutable original evidence,
+  eligibility, rejection reason, and observed time.
+- `rules`: immutable workspace-scoped versions containing identity field,
+  required fields, exclusions, and waiting window.
+- `reconciliation_runs`: exact source import, destination import, rule version,
+  idempotency key, coverage, state, counts, and execution timestamps.
+- `reconciliation_results`: exactly one category, reason code, and evidence object
+  for a source observation in a run.
+- `result_candidates`: ranked destination observations considered for a result.
+- `reviews`: append-only reviewer annotations linked to the original result.
 
-- Business-data tables contain `workspace_id`.
-- IDs are stable UUIDs; timestamps are UTC.
-- Runs reference immutable import and rule versions.
-- A source observation has at most one final result per run.
-- An idempotency key cannot create duplicate runs or results.
-- Reviews never rewrite original evidence or machine reasons.
+`connectors` and `sync_jobs` remain deferred until the CSV workflow works.
 
-Migrations become authoritative in Task 02. This file must then describe those migrations.
+## Implemented invariants
+
+- Every business-data table contains a non-null `workspace_id`.
+- IDs are UUIDs and database-created timestamps use timezone-aware values.
+- Composite foreign keys require referenced imports, observations, rules, runs,
+  results, and candidates to belong to the same workspace.
+- Deleting a workspace cascades through its complete data graph.
+- Import row counts must be non-negative and accepted plus rejected must equal total.
+- A checksum can create only one import of a given kind inside a workspace.
+- An external record ID is unique inside one import.
+- Rule versions are positive and unique inside one workspace.
+- Source and destination imports for a run must differ.
+- An idempotency key can create only one run inside a workspace.
+- A source observation receives at most one result per run.
+- A destination observation appears at most once in a result's candidate list.
+- Candidate rank is positive.
+- Reviews add annotations without changing original evidence or machine reasons.
+
+## PostgreSQL enum values
+
+- Import kind: `source`, `destination`
+- Coverage: `complete`, `partial`, `failed`
+- Import status: `pending`, `completed`, `failed`
+- Run status: `pending`, `running`, `completed`, `failed`
+- Result category: `matched`, `missing`, `duplicate`, `field_mismatch`,
+  `excluded`, `unknown`
+
+## Fixture contracts
+
+Synthetic fixtures live in `backend/tests/fixtures/`. The source and destination
+headers are frozen in that directory's README. `fixture_manifest.json` owns the
+expected category and reason code for each source record. Task 03 will parse these
+files; Task 04 will prove the manifest classifications.

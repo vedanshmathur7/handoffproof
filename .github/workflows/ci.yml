@@ -10,6 +10,22 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: handoffproof
+          POSTGRES_USER: handoffproof
+          POSTGRES_PASSWORD: handoffproof
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U handoffproof -d handoffproof"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+    env:
+      DATABASE_URL: postgresql+psycopg://handoffproof:handoffproof@localhost:5432/handoffproof
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,6 +37,12 @@ jobs:
       - name: Install locked dependencies
         working-directory: backend
         run: uv sync --locked
+      - name: Verify migration round trip
+        working-directory: backend
+        run: |
+          uv run alembic upgrade head
+          uv run alembic downgrade base
+          uv run alembic upgrade head
       - name: Test, lint, and type-check
         run: make backend-check
 

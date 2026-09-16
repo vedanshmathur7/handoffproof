@@ -1,0 +1,5 @@
+destination_record_id,created_at,email,full_name,company,region
+DST_MATCH,2026-09-01T09:01:00Z,match@example.test,Mira Shah,Northstar Labs,APAC
+DST_DUPLICATE_1,2026-09-01T09:11:00Z,duplicate@example.test,Diya Rao,Atlas Works,APAC
+DST_DUPLICATE_2,2026-09-01T09:12:00Z,duplicate@example.test,Diya Rao,Atlas Works,APAC
+DST_MISMATCH,2026-09-01T09:16:00Z,mismatch@example.test,Ravi Sen,Wrong Company,AMER

@@ -1,1 +1,3 @@
-# Domain type placeholder; implement in Tasks 02–04.
+from app.models import CoverageStatus, ImportKind, ResultCategory
+
+__all__ = ["CoverageStatus", "ImportKind", "ResultCategory"]

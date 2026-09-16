@@ -69,3 +69,75 @@ PostgreSQL answers a real query.
 - Frontend test: `frontend/tests/App.test.tsx`
 - Local commands: `Makefile`
 - PostgreSQL service: `compose.yaml`
+
+## Phase 2: Database schema and deterministic fixtures
+
+### Simple explanation
+
+We designed labelled cupboards before storing real workflow data:
+
+- A workspace is one company's locked room.
+- An import is one CSV delivery box.
+- An observation is one row taken from that box.
+- A rule says how two rows should be compared.
+- A run records one comparison job.
+- A result records the final category and reason.
+- Candidates show which destination rows were considered.
+- Reviews preserve a human comment without changing the machine result.
+
+Example: suppose Company A and Company B both have a lead called
+`mira@example.test`. Every row also carries its `workspace_id`, and composite
+foreign keys prevent Company B's run from pointing at Company A's import.
+
+### Technical flow
+
+1. SQLAlchemy models define Python-side entities, columns, types, and constraints.
+2. Alembic migration `eb584a4dd816` creates the same schema in PostgreSQL.
+3. UUID primary keys give records stable identifiers.
+4. Timezone-aware columns store database timestamps consistently.
+5. Composite foreign keys enforce workspace ownership in PostgreSQL.
+6. Unique and check constraints reject duplicate IDs, repeated idempotency keys,
+   invalid counts, and other impossible states.
+7. `ON DELETE CASCADE` removes a deleted workspace's dependent graph.
+8. Synthetic CSV files and a JSON manifest freeze expected inputs and outcomes.
+9. Tests prove constraints, cross-workspace rejection, cascades, headers, all six
+   categories, partial coverage, and malformed-row scenarios.
+
+### Concepts to learn
+
+- Relational database schema design
+- Primary keys, foreign keys, composite foreign keys, and unique constraints
+- Check constraints and database invariants
+- Multi-tenant workspace isolation
+- UUIDs and timezone-aware timestamps
+- PostgreSQL enum and JSONB columns
+- SQLAlchemy 2 declarative models
+- Alembic migrations and schema drift
+- Migration upgrade/downgrade round trips
+- Cascading deletes
+- Deterministic test fixtures and golden manifests
+- Idempotency keys
+
+### Search keywords
+
+- `relational database primary key foreign key beginner`
+- `composite foreign key multi tenant PostgreSQL`
+- `PostgreSQL check constraint unique constraint`
+- `SQLAlchemy 2 mapped_column tutorial`
+- `Alembic migration upgrade downgrade tutorial`
+- `Alembic check schema drift`
+- `PostgreSQL UUID timezone timestamp JSONB enum`
+- `ON DELETE CASCADE explained`
+- `SaaS tenant isolation workspace_id`
+- `idempotency key API database`
+- `golden test fixtures manifest`
+
+### Files worth reading
+
+- ORM schema: `backend/app/models.py`
+- Database base/session: `backend/app/database.py`
+- Initial migration: `backend/migrations/versions/eb584a4dd816_initial_schema.py`
+- Constraint tests: `backend/tests/test_database.py`
+- Fixture contract tests: `backend/tests/test_fixtures.py`
+- Synthetic data: `backend/tests/fixtures/`
+- Schema contract: `docs/DATABASE.md`

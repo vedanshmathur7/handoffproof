@@ -1,0 +1,7 @@
+source_record_id,submitted_at,email,full_name,company,region,transfer_enabled
+SRC_MATCH,2026-09-01T09:00:00Z,match@example.test,Mira Shah,Northstar Labs,APAC,true
+SRC_MISSING,2026-09-01T09:05:00Z,missing@example.test,Mohan Das,Blue Orchard,EMEA,true
+SRC_DUPLICATE,2026-09-01T09:10:00Z,duplicate@example.test,Diya Rao,Atlas Works,APAC,true
+SRC_MISMATCH,2026-09-01T09:15:00Z,mismatch@example.test,Ravi Sen,Correct Company,AMER,true
+SRC_EXCLUDED,2026-09-01T09:20:00Z,excluded@example.test,Esha Jain,Internal Test,APAC,false
+SRC_UNKNOWN,2026-09-01T09:25:00Z,unknown@example.test,Noor Ali,Signal House,EMEA,true

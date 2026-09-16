@@ -1,0 +1,5 @@
+source_record_id,submitted_at,email,full_name,company,region,transfer_enabled
+,2026-09-01T10:00:00Z,blank-id@example.test,Blank Id,Example Co,APAC,true
+BAD_TIMESTAMP,not-a-timestamp,bad-time@example.test,Bad Time,Example Co,APAC,true
+BAD_EMAIL,2026-09-01T10:10:00Z,not-an-email,Bad Email,Example Co,APAC,true
+BAD_BOOLEAN,2026-09-01T10:15:00Z,bad-bool@example.test,Bad Boolean,Example Co,APAC,maybe

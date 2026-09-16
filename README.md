@@ -6,9 +6,10 @@ Example: a form accepted 100 submissions. HandoffProof verifies which eligible s
 
 ## Current repository state
 
-The runnable foundation exists: FastAPI, React, PostgreSQL, health checks, tests,
-linting, type checking, and production frontend builds are verified. CSV imports and
-reconciliation behavior have not been implemented. Start with
+The runnable foundation and versioned PostgreSQL schema exist. Health checks,
+workspace isolation, deterministic CSV fixtures, tests, linting, type checking, and
+production frontend builds are verified. CSV import APIs and reconciliation behavior
+have not been implemented. Start with
 [docs/STATUS.md](docs/STATUS.md), then follow [docs/PLAN.md](docs/PLAN.md).
 
 ## Stack

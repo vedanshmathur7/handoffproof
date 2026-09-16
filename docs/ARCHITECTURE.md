@@ -1,12 +1,16 @@
 # Architecture
 
-## Planned runtime
+## Runtime
 
 ```text
 React UI -> FastAPI -> application services -> PostgreSQL
                  \-> deterministic reconciliation engine
 Later: scheduler -> worker -> read-only Typeform/HubSpot connectors
 ```
+
+FastAPI, React, and PostgreSQL are runnable. The eight-table schema and synthetic
+CSV contracts are implemented. Import services and the reconciliation engine are
+still pending.
 
 ## Boundaries
 

@@ -1,11 +1,11 @@
 # Current status
 
-- Current phase: Data
-- Active task: `tasks/02-database-and-fixtures.md`
+- Current phase: Backend
+- Active task: `tasks/03-imports-and-rules-api.md`
 - Working name: HandoffProof
 - Verified workflows: 0/2 (`CSV -> reconciliation -> dashboard`, `Typeform -> HubSpot shadow check`)
-- Completed tasks: 2/9
-- Working application: foundation only; no reconciliation behavior yet
+- Completed tasks: 3/9
+- Working application: foundation and storage; CSV import behavior is next
 
 ## Completed and verified
 
@@ -16,10 +16,12 @@
 - `GET /health` verifies both the API process and a real PostgreSQL connection.
 - Private GitHub repository `vedanshmathur7/handoffproof` tracks the project, and CI
   runs the backend and frontend checks on every push and pull request.
+- Task 02 implemented all eight planned PostgreSQL entities, workspace-scoped
+  constraints, the initial migration, and deterministic synthetic fixtures.
 
 ## In progress
 
-- Task 02 database schema and deterministic fixtures have not started.
+- Task 03 imports and immutable rules API has not started.
 
 ## Blockers
 
@@ -39,9 +41,13 @@
 - Real `GET /health`: HTTP 200 with process and database both `ready`.
 - Browser inspection: HandoffProof heading and the empty-state message rendered correctly.
 - GitHub Actions CI run #1: passed in 33 seconds for commit `8aeb7a2`.
+- Migration `eb584a4dd816` passed upgrade, downgrade, and fresh re-upgrade.
+- `uv run alembic check`: no schema drift detected.
+- `make check`: passed with 10 backend tests, backend lint/types/schema checks,
+  1 frontend test, frontend lint/types, and a production build.
 
 ## Next three actions
 
-1. Define SQLAlchemy metadata, UUID, UTC timestamp, and workspace-scoping conventions.
-2. Write the first Alembic migration for Task 02 entities and constraints.
-3. Create deterministic CSV fixtures for every reconciliation category.
+1. Implement demo workspace creation.
+2. Parse source and destination CSV contracts with stable validation errors.
+3. Persist import counts, evidence, normalized observations, and coverage status.

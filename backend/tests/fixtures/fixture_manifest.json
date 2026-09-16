@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "identity_field": "email",
+  "required_fields": ["full_name", "company", "region"],
+  "complete_inputs": {
+    "source": "source.csv",
+    "destination": "destination.csv",
+    "destination_coverage": "complete"
+  },
+  "partial_inputs": {
+    "source": "source.csv",
+    "destination": "partial_destination.csv",
+    "destination_coverage": "partial"
+  },
+  "cases": [
+    {
+      "source_record_id": "SRC_MATCH",
+      "category": "matched",
+      "reason_code": "EXACT_MATCH"
+    },
+    {
+      "source_record_id": "SRC_MISSING",
+      "category": "missing",
+      "reason_code": "NO_CANDIDATE_AFTER_WAIT"
+    },
+    {
+      "source_record_id": "SRC_DUPLICATE",
+      "category": "duplicate",
+      "reason_code": "MULTIPLE_IDENTITY_MATCHES"
+    },
+    {
+      "source_record_id": "SRC_MISMATCH",
+      "category": "field_mismatch",
+      "reason_code": "REQUIRED_FIELD_MISMATCH"
+    },
+    {
+      "source_record_id": "SRC_EXCLUDED",
+      "category": "excluded",
+      "reason_code": "RULE_EXCLUDED"
+    },
+    {
+      "source_record_id": "SRC_UNKNOWN",
+      "category": "unknown",
+      "reason_code": "DESTINATION_COVERAGE_PARTIAL",
+      "input_set": "partial_inputs"
+    }
+  ],
+  "malformed_source": {
+    "file": "malformed_source.csv",
+    "expected_rejected_rows": 4,
+    "reason_codes": [
+      "MISSING_SOURCE_RECORD_ID",
+      "INVALID_SUBMITTED_AT",
+      "INVALID_EMAIL",
+      "INVALID_TRANSFER_ENABLED"
+    ]
+  }
+}
