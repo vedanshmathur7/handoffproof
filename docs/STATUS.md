@@ -1,11 +1,11 @@
 # Current status
 
 - Current phase: Backend
-- Active task: `tasks/03-imports-and-rules-api.md`
+- Active task: `tasks/04-reconciliation-engine.md`
 - Working name: HandoffProof
 - Verified workflows: 0/2 (`CSV -> reconciliation -> dashboard`, `Typeform -> HubSpot shadow check`)
-- Completed tasks: 3/9
-- Working application: foundation and storage; CSV import behavior is next
+- Completed tasks: 4/9
+- Working application: workspace, CSV imports, evidence, and immutable rules are usable
 
 ## Completed and verified
 
@@ -18,10 +18,12 @@
   runs the backend and frontend checks on every push and pull request.
 - Task 02 implemented all eight planned PostgreSQL entities, workspace-scoped
   constraints, the initial migration, and deterministic synthetic fixtures.
+- Task 03 implemented demo workspaces, strict source/destination CSV imports,
+  row evidence and stable errors, coverage counts, idempotency, and versioned rules.
 
 ## In progress
 
-- Task 03 imports and immutable rules API has not started.
+- Task 04 deterministic reconciliation and result APIs have not started.
 
 ## Blockers
 
@@ -45,9 +47,13 @@
 - `uv run alembic check`: no schema drift detected.
 - `make check`: passed with 10 backend tests, backend lint/types/schema checks,
   1 frontend test, frontend lint/types, and a production build.
+- Migration `382806336a30` passed downgrade, upgrade, and schema-drift checks.
+- `make check`: passed with 16 backend tests, backend lint/types/schema checks,
+  1 frontend test, frontend lint/types, and a production build. The Task 05 suite
+  remains intentionally skipped.
 
 ## Next three actions
 
-1. Implement demo workspace creation.
-2. Parse source and destination CSV contracts with stable validation errors.
-3. Persist import counts, evidence, normalized observations, and coverage status.
+1. Implement pure typed normalization and deterministic classification branches.
+2. Persist idempotent runs, candidates, field-level evidence, and exact counts.
+3. Add summary, results, review, and CSV export endpoints with integration tests.

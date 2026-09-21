@@ -1,4 +1,4 @@
-.PHONY: setup deps-up deps-down migrate backend-dev frontend-dev backend-test backend-migration-check backend-lint backend-typecheck backend-check frontend-test frontend-lint frontend-typecheck frontend-build frontend-check test lint typecheck build check demo
+.PHONY: setup deps-up deps-down migrate api-docs backend-dev frontend-dev backend-test backend-migration-check backend-lint backend-typecheck backend-check frontend-test frontend-lint frontend-typecheck frontend-build frontend-check test lint typecheck build check demo
 
 setup:
 	cd backend && uv sync
@@ -12,6 +12,9 @@ deps-down:
 
 migrate:
 	cd backend && uv run alembic upgrade head
+
+api-docs:
+	cd backend && uv run python scripts/export_openapi.py
 
 backend-dev: migrate
 	cd backend && uv run uvicorn app.main:app --reload --port 8000
@@ -58,4 +61,4 @@ build: frontend-build
 check: backend-check frontend-check
 
 demo:
-	@echo "Synthetic fixtures are in backend/tests/fixtures; API loading arrives in Task 03."
+	@echo "Start the API with 'make backend-dev', then open http://localhost:8000/docs."

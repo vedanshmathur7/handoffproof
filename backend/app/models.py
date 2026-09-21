@@ -130,6 +130,10 @@ class ImportBatch(Base, TimestampMixin):
     total_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     accepted_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     rejected_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    duplicate_rows: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    schema_fields: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
 
 
 class Observation(Base, TimestampMixin):
@@ -141,9 +145,7 @@ class Observation(Base, TimestampMixin):
             name="fk_observations_workspace_import",
             ondelete="CASCADE",
         ),
-        UniqueConstraint(
-            "workspace_id", "id", name="uq_observations_workspace_id_id"
-        ),
+        UniqueConstraint("workspace_id", "id", name="uq_observations_workspace_id_id"),
         UniqueConstraint(
             "workspace_id",
             "import_id",
@@ -175,9 +177,7 @@ class Rule(Base, TimestampMixin):
     __tablename__ = "rules"
     __table_args__ = (
         UniqueConstraint("workspace_id", "id", name="uq_rules_workspace_id_id"),
-        UniqueConstraint(
-            "workspace_id", "version", name="uq_rules_workspace_version"
-        ),
+        UniqueConstraint("workspace_id", "version", name="uq_rules_workspace_version"),
         CheckConstraint("version > 0", name="positive_version"),
         CheckConstraint("wait_seconds >= 0", name="nonnegative_wait_seconds"),
     )
@@ -196,6 +196,7 @@ class Rule(Base, TimestampMixin):
         JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
     )
     wait_seconds: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    timezone: Mapped[str] = mapped_column(String(100), nullable=False, default="UTC")
 
 
 class ReconciliationRun(Base, TimestampMixin):

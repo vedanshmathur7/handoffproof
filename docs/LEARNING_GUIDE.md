@@ -141,3 +141,75 @@ foreign keys prevent Company B's run from pointing at Company A's import.
 - Fixture contract tests: `backend/tests/test_fixtures.py`
 - Synthetic data: `backend/tests/fixtures/`
 - Schema contract: `docs/DATABASE.md`
+
+## Phase 3: CSV imports and immutable rules
+
+### Simple explanation
+
+We built the receiving desk for two CSV boxes:
+
+- The source box contains leads that should be transferred.
+- The destination box contains leads that actually arrived.
+- The desk checks every label and row before putting data in the cupboard.
+- It keeps the original row as evidence and a cleaned copy for comparison.
+- A rule is photocopied into a new numbered version whenever it changes.
+
+Example: `Mira@Example.Test` with extra spaces is preserved in original evidence,
+while its comparison value becomes `mira@example.test`. If row 4 has an invalid
+timestamp, the API reports row 4 with `INVALID_SUBMITTED_AT`; it is never silently
+dropped.
+
+### Technical flow
+
+1. FastAPI accepts a multipart CSV upload with workspace and coverage metadata.
+2. The service limits file size, validates type, UTF-8 encoding, and exact headers.
+3. Python's CSV parser validates IDs, timezone-aware timestamps, email shape, and
+   source eligibility values.
+4. Each row stores immutable original JSON evidence plus normalized JSON data.
+5. Accepted, rejected, and duplicate counts determine complete, partial, or failed
+   coverage using explicit rules.
+6. SHA-256 plus workspace and import kind makes byte-identical retries idempotent.
+7. Rule creation checks selected fields against both imported schemas and validates
+   the IANA timezone.
+8. PostgreSQL locks the workspace while assigning the next rule version, so an old
+   rule is never edited in place.
+9. FastAPI generates the OpenAPI contract saved in `docs/openapi.json`.
+
+### Concepts to learn
+
+- Multipart file uploads
+- Boundary validation and stable error codes
+- CSV parsing and schema validation
+- Original evidence versus normalized data
+- Unicode trimming, case folding, timestamps, and IANA timezones
+- Content hashing with SHA-256
+- Idempotent API requests
+- Complete, partial, and failed data coverage
+- Immutable versioned configuration
+- Database row locks and concurrent writes
+- OpenAPI generation from typed API models
+- API integration tests and tenant isolation tests
+
+### Search keywords
+
+- `FastAPI UploadFile multipart Form tutorial`
+- `CSV schema validation Python DictReader`
+- `API boundary validation stable error codes`
+- `data normalization vs raw evidence`
+- `Python datetime ISO 8601 timezone aware`
+- `Python zoneinfo IANA timezone`
+- `SHA-256 idempotent file upload`
+- `PostgreSQL SELECT FOR UPDATE concurrency`
+- `immutable versioned configuration database`
+- `FastAPI Pydantic OpenAPI schema generation`
+- `httpx ASGITransport FastAPI integration test`
+- `multi tenant API workspace isolation test`
+
+### Files worth reading
+
+- HTTP routes: `backend/app/api/imports.py`
+- CSV and rule behavior: `backend/app/services/imports.py`
+- Scoped database reads: `backend/app/repositories/imports.py`
+- Request/response types: `backend/app/api/schemas.py`
+- Integration tests: `backend/tests/test_imports.py`
+- Generated API contract: `docs/openapi.json`

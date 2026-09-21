@@ -8,9 +8,9 @@ React UI -> FastAPI -> application services -> PostgreSQL
 Later: scheduler -> worker -> read-only Typeform/HubSpot connectors
 ```
 
-FastAPI, React, and PostgreSQL are runnable. The eight-table schema and synthetic
-CSV contracts are implemented. Import services and the reconciliation engine are
-still pending.
+FastAPI, React, and PostgreSQL are runnable. The workspace, CSV import, validation,
+normalization, evidence, and immutable-rule flow is implemented. The deterministic
+reconciliation engine is next.
 
 ## Boundaries
 

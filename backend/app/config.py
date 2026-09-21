@@ -9,6 +9,7 @@ class Settings(BaseSettings):
         "postgresql+psycopg://handoffproof:handoffproof@localhost:5432/handoffproof"
     )
     frontend_origin: str = "http://localhost:5173"
+    max_upload_bytes: int = 1_000_000
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env"),

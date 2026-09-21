@@ -260,8 +260,8 @@ def test_deleting_workspace_cascades_through_full_graph() -> None:
         )
         for model in scoped_models:
             remaining = session.scalar(
-                select(func.count()).select_from(model).where(
-                    model.workspace_id == workspace_id
-                )
+                select(func.count())
+                .select_from(model)
+                .where(model.workspace_id == workspace_id)
             )
             assert remaining == 0

@@ -52,14 +52,10 @@ def test_csv_headers_and_manifest_are_frozen() -> None:
 def test_duplicate_and_mismatch_evidence_is_present() -> None:
     _, destination_rows = read_csv("destination.csv")
     duplicate_rows = [
-        row
-        for row in destination_rows
-        if row["email"] == "duplicate@example.test"
+        row for row in destination_rows if row["email"] == "duplicate@example.test"
     ]
     mismatch_row = next(
-        row
-        for row in destination_rows
-        if row["email"] == "mismatch@example.test"
+        row for row in destination_rows if row["email"] == "mismatch@example.test"
     )
 
     assert len(duplicate_rows) == 2
@@ -75,9 +71,5 @@ def test_partial_and_malformed_scenarios_are_explicit() -> None:
 
     assert manifest["partial_inputs"]["destination_coverage"] == "partial"
     assert len(partial_rows) == 1
-    assert len(malformed_rows) == manifest["malformed_source"][
-        "expected_rejected_rows"
-    ]
-    assert len(manifest["malformed_source"]["reason_codes"]) == len(
-        malformed_rows
-    )
+    assert len(malformed_rows) == manifest["malformed_source"]["expected_rejected_rows"]
+    assert len(manifest["malformed_source"]["reason_codes"]) == len(malformed_rows)

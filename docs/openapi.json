@@ -1,0 +1,861 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "HandoffProof API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspaces": {
+      "post": {
+        "tags": [
+          "workspaces"
+        ],
+        "summary": "Create Workspace",
+        "operationId": "create_workspace_api_v1_workspaces_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/imports/source": {
+      "post": {
+        "tags": [
+          "imports and rules"
+        ],
+        "summary": "Upload Source",
+        "operationId": "upload_source_api_v1_imports_source_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_source_api_v1_imports_source_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportRead"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/imports/destination": {
+      "post": {
+        "tags": [
+          "imports and rules"
+        ],
+        "summary": "Upload Destination",
+        "operationId": "upload_destination_api_v1_imports_destination_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_destination_api_v1_imports_destination_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportRead"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/imports/{import_id}": {
+      "get": {
+        "tags": [
+          "imports and rules"
+        ],
+        "summary": "Get Import",
+        "operationId": "get_import_api_v1_imports__import_id__get",
+        "parameters": [
+          {
+            "name": "import_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Import Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportRead"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rules": {
+      "post": {
+        "tags": [
+          "imports and rules"
+        ],
+        "summary": "Post Rule",
+        "operationId": "post_rule_api_v1_rules_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuleCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleRead"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_upload_destination_api_v1_imports_destination_post": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageStatus",
+            "default": "complete"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "file"
+        ],
+        "title": "Body_upload_destination_api_v1_imports_destination_post"
+      },
+      "Body_upload_source_api_v1_imports_source_post": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageStatus",
+            "default": "complete"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "file"
+        ],
+        "title": "Body_upload_source_api_v1_imports_source_post"
+      },
+      "CoverageStatus": {
+        "type": "string",
+        "enum": [
+          "complete",
+          "partial",
+          "failed"
+        ],
+        "title": "CoverageStatus"
+      },
+      "EligibilityInput": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field",
+            "examples": [
+              "transfer_enabled"
+            ]
+          },
+          "equals": {
+            "type": "string",
+            "title": "Equals",
+            "examples": [
+              "true"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "field",
+          "equals"
+        ],
+        "title": "EligibilityInput"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "details": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "process": {
+            "type": "string",
+            "const": "ready",
+            "title": "Process"
+          },
+          "database": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "unavailable"
+            ],
+            "title": "Database"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "process",
+          "database"
+        ],
+        "title": "HealthResponse"
+      },
+      "ImportKind": {
+        "type": "string",
+        "enum": [
+          "source",
+          "destination"
+        ],
+        "title": "ImportKind"
+      },
+      "ImportRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ImportKind"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "checksum": {
+            "type": "string",
+            "title": "Checksum"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageStatus"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ImportStatus"
+          },
+          "total_rows": {
+            "type": "integer",
+            "title": "Total Rows"
+          },
+          "accepted_rows": {
+            "type": "integer",
+            "title": "Accepted Rows"
+          },
+          "rejected_rows": {
+            "type": "integer",
+            "title": "Rejected Rows"
+          },
+          "duplicate_rows": {
+            "type": "integer",
+            "title": "Duplicate Rows"
+          },
+          "schema_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Schema Fields"
+          },
+          "row_errors": {
+            "items": {
+              "$ref": "#/components/schemas/RowError"
+            },
+            "type": "array",
+            "title": "Row Errors"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspace_id",
+          "kind",
+          "filename",
+          "checksum",
+          "coverage",
+          "status",
+          "total_rows",
+          "accepted_rows",
+          "rejected_rows",
+          "duplicate_rows",
+          "schema_fields",
+          "row_errors",
+          "created_at"
+        ],
+        "title": "ImportRead"
+      },
+      "ImportStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "completed",
+          "failed"
+        ],
+        "title": "ImportStatus"
+      },
+      "RowError": {
+        "properties": {
+          "row_number": {
+            "type": "integer",
+            "title": "Row Number"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "row_number",
+          "code"
+        ],
+        "title": "RowError"
+      },
+      "RuleCreate": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "source_import_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Import Id"
+          },
+          "destination_import_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Import Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "eligibility": {
+            "$ref": "#/components/schemas/EligibilityInput"
+          },
+          "identity_field": {
+            "type": "string",
+            "title": "Identity Field"
+          },
+          "required_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Required Fields"
+          },
+          "wait_seconds": {
+            "type": "integer",
+            "maximum": 2592000.0,
+            "minimum": 0.0,
+            "title": "Wait Seconds"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "UTC"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "source_import_id",
+          "destination_import_id",
+          "name",
+          "eligibility",
+          "identity_field",
+          "required_fields",
+          "wait_seconds"
+        ],
+        "title": "RuleCreate",
+        "examples": [
+          {
+            "destination_import_id": "00000000-0000-0000-0000-000000000003",
+            "eligibility": {
+              "equals": "true",
+              "field": "transfer_enabled"
+            },
+            "identity_field": "email",
+            "name": "Email handoff",
+            "required_fields": [
+              "full_name",
+              "company",
+              "region"
+            ],
+            "source_import_id": "00000000-0000-0000-0000-000000000002",
+            "timezone": "UTC",
+            "wait_seconds": 300,
+            "workspace_id": "00000000-0000-0000-0000-000000000001"
+          }
+        ]
+      },
+      "RuleRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "eligibility": {
+            "$ref": "#/components/schemas/EligibilityInput"
+          },
+          "identity_field": {
+            "type": "string",
+            "title": "Identity Field"
+          },
+          "required_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Required Fields"
+          },
+          "wait_seconds": {
+            "type": "integer",
+            "title": "Wait Seconds"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspace_id",
+          "version",
+          "name",
+          "eligibility",
+          "identity_field",
+          "required_fields",
+          "wait_seconds",
+          "timezone",
+          "created_at"
+        ],
+        "title": "RuleRead"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WorkspaceCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "examples": [
+              "Demo workspace"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "WorkspaceCreate"
+      },
+      "WorkspaceRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "created_at"
+        ],
+        "title": "WorkspaceRead"
+      }
+    }
+  }
+}
