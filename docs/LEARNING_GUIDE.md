@@ -213,3 +213,71 @@ dropped.
 - Request/response types: `backend/app/api/schemas.py`
 - Integration tests: `backend/tests/test_imports.py`
 - Generated API contract: `docs/openapi.json`
+
+## Phase 4: Deterministic reconciliation engine
+
+### Simple explanation
+
+We built the inspector that compares the two CSV boxes using one written rule.
+
+For each source lead it asks questions in a fixed order: Can I trust the data? Was
+this lead meant to transfer? Has enough time passed? Is the email usable? How many
+destination rows match? Do the required fields agree? The first decisive answer
+becomes one category and a stable reason code.
+
+Example: `duplicate@example.test` matches two destination rows. The result is
+`duplicate / MULTIPLE_IDENTITY_MATCHES`, and both candidate rows remain visible as
+evidence. A human note can be added later, but it cannot rewrite that machine result.
+
+### Technical flow
+
+1. Pure functions normalize typed scalar values and classify one source observation.
+2. The service locks the workspace and checks the idempotency key.
+3. It loads accepted source/destination observations and the exact immutable rule.
+4. Combined import coverage becomes complete, partial, or failed.
+5. Every accepted source produces one persisted result inside the transaction.
+6. Ranked candidates and normalized field differences are stored separately.
+7. The run stores exact counts and completion timestamps before one commit.
+8. Read APIs provide summary, category filter, pagination, evidence, and rule details.
+9. Reviews append human context without changing machine evidence.
+10. CSV export escapes spreadsheet formulas before download.
+
+### Concepts to learn
+
+- Pure functions and deterministic business logic
+- Decision trees and branch ordering
+- Domain models versus database models
+- Stable machine-readable reason codes
+- Transaction boundaries and atomic commits
+- Pessimistic row locking with `SELECT FOR UPDATE`
+- Idempotency under concurrent requests
+- Candidate ranking and field-level evidence
+- Offset/limit pagination and category filters
+- Append-only audit annotations
+- CSV injection and spreadsheet formula escaping
+- Table-driven tests and integration tests
+
+### Search keywords
+
+- `pure function deterministic business rules Python`
+- `decision tree branch order domain logic`
+- `domain model vs ORM model`
+- `stable reason codes API design`
+- `SQLAlchemy async transaction atomic commit`
+- `PostgreSQL SELECT FOR UPDATE concurrent request`
+- `idempotency key race condition API`
+- `offset limit pagination FastAPI SQLAlchemy`
+- `append only audit log design`
+- `CSV injection formula prevention`
+- `pytest table driven tests parametrize`
+- `FastAPI end to end integration testing httpx`
+
+### Files worth reading
+
+- Pure engine: `backend/app/domain/matching.py`
+- Typed domain data: `backend/app/domain/models.py`
+- Transaction orchestration: `backend/app/services/reconciliation.py`
+- Result queries: `backend/app/repositories/reconciliations.py`
+- HTTP endpoints: `backend/app/api/reconciliations.py`
+- Pure tests: `backend/tests/test_matching.py`
+- API integration tests: `backend/tests/test_reconciliation_api.py`

@@ -4,7 +4,13 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models import CoverageStatus, ImportKind, ImportStatus
+from app.models import (
+    CoverageStatus,
+    ImportKind,
+    ImportStatus,
+    ResultCategory,
+    RunStatus,
+)
 
 
 class WorkspaceCreate(BaseModel):
@@ -96,3 +102,80 @@ class ErrorResponse(BaseModel):
     code: str
     message: str
     details: Any | None = None
+
+
+class ReconciliationCreate(BaseModel):
+    workspace_id: UUID
+    source_import_id: UUID
+    destination_import_id: UUID
+    rule_id: UUID
+    idempotency_key: str = Field(min_length=1, max_length=255)
+    evaluated_at: datetime | None = None
+
+
+class ReconciliationSummary(BaseModel):
+    id: UUID
+    workspace_id: UUID
+    source_import_id: UUID
+    destination_import_id: UUID
+    rule_id: UUID
+    rule_version: int
+    status: RunStatus
+    coverage: CoverageStatus
+    result_counts: dict[str, int]
+    started_at: datetime | None
+    completed_at: datetime | None
+    created_at: datetime
+
+
+class RuleReference(BaseModel):
+    id: UUID
+    version: int
+    name: str
+    identity_field: str
+    required_fields: list[str]
+    wait_seconds: int
+    timezone: str
+
+
+class CandidateRead(BaseModel):
+    destination_observation_id: UUID
+    external_record_id: str
+    rank: int
+    match_basis: dict[str, Any]
+    original_evidence: dict[str, Any]
+
+
+class ReviewCreate(BaseModel):
+    workspace_id: UUID
+    reviewer: str = Field(min_length=1, max_length=200)
+    annotation: str = Field(min_length=1, max_length=4000)
+
+
+class ReviewRead(BaseModel):
+    id: UUID
+    reviewer: str
+    annotation: str
+    created_at: datetime
+
+
+class ResultRead(BaseModel):
+    id: UUID
+    run_id: UUID
+    source_observation_id: UUID
+    source_record_id: str
+    category: ResultCategory
+    reason_code: str
+    evidence: dict[str, Any]
+    source_evidence: dict[str, Any]
+    candidates: list[CandidateRead]
+    reviews: list[ReviewRead]
+    rule: RuleReference
+    created_at: datetime
+
+
+class ResultPage(BaseModel):
+    items: list[ResultRead]
+    total: int
+    offset: int
+    limit: int

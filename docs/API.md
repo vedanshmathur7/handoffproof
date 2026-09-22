@@ -69,13 +69,58 @@ imports; eligibility must exist in the source; timezone must be an IANA name.
 }
 ```
 
-## Planned endpoints
+### `POST /api/v1/reconciliations`
 
-- `POST /api/v1/reconciliations`: execute a comparison.
-- `GET /api/v1/reconciliations/{run_id}`: read summary and coverage.
-- `GET /api/v1/reconciliations/{run_id}/results`: filter and paginate results.
-- `POST /api/v1/results/{result_id}/reviews`: add a review annotation.
-- `GET /api/v1/reconciliations/{run_id}/export`: download results.
+Executes the deterministic engine synchronously. The body identifies one workspace,
+source import, destination import, immutable rule, idempotency key, and optional
+timezone-aware `evaluated_at`. A new run returns HTTP 201; the same request and key
+returns the original run with HTTP 200. Reusing a key for different inputs returns
+`IDEMPOTENCY_KEY_REUSED`.
+
+### `GET /api/v1/reconciliations/{run_id}?workspace_id={workspace_id}`
+
+Returns status, combined coverage, rule version, timestamps, and counts for all six
+categories.
+
+### `GET /api/v1/reconciliations/{run_id}/results`
+
+Requires `workspace_id`; accepts optional `category`, `offset`, and `limit` (1-100).
+Each result contains original source evidence, stable reason code, field differences,
+ranked destination candidates, rule details, timestamps, and append-only reviews.
+
+### `POST /api/v1/results/{result_id}/reviews`
+
+Appends reviewer and annotation fields. It never changes the machine category,
+reason, or evidence.
+
+### `GET /api/v1/reconciliations/{run_id}/export`
+
+Downloads a CSV containing source ID, category, reason, candidate IDs, differences,
+and rule version. Formula-like values are escaped to prevent spreadsheet execution.
+
+## Result behavior
+
+Classification follows this fixed order: incomplete coverage, exclusion, open wait
+window, identity validity, candidate count, then required-field comparison. The core
+uses no network or LLM. Partial or failed coverage always produces `unknown`.
+
+Example complete-fixture counts at `2026-09-02T00:00:00Z`:
+
+```json
+{
+  "matched": 1,
+  "missing": 2,
+  "duplicate": 1,
+  "field_mismatch": 1,
+  "excluded": 1,
+  "unknown": 0
+}
+```
+
+The manifest's partial-coverage case produces
+`unknown / DESTINATION_COVERAGE_PARTIAL`. A run against the partial destination
+fixture returns six `unknown` results because the whole destination snapshot is
+untrustworthy.
 
 Implemented validation errors contain a stable `code`, human-readable `message`,
 and optional `details`. Request IDs are deferred to Task 07 observability.

@@ -9,8 +9,8 @@ Later: scheduler -> worker -> read-only Typeform/HubSpot connectors
 ```
 
 FastAPI, React, and PostgreSQL are runnable. The workspace, CSV import, validation,
-normalization, evidence, and immutable-rule flow is implemented. The deterministic
-reconciliation engine is next.
+normalization, evidence, immutable-rule flow, deterministic reconciliation,
+reviews, and export are implemented. The reviewer dashboard is next.
 
 ## Boundaries
 
@@ -28,9 +28,10 @@ reconciliation engine is next.
 2. Save metadata and observations in a workspace.
 3. Freeze a versioned reconciliation rule.
 4. Create a run referencing two completed imports and one rule.
-5. Classify each eligible source observation exactly once.
-6. Save results and counts in one transaction.
-7. Serve the result to the UI and CSV export.
+5. Classify every accepted source observation exactly once, including explicit
+   `excluded` and evidence-limited `unknown` outcomes.
+6. Save results, ranked candidates, field differences, and counts in one transaction.
+7. Serve paginated/filterable results, append-only reviews, and safe CSV export.
 
 ## Trust rules
 

@@ -1,11 +1,11 @@
 # Current status
 
-- Current phase: Backend
-- Active task: `tasks/04-reconciliation-engine.md`
+- Current phase: Frontend
+- Active task: `tasks/05-dashboard.md`
 - Working name: HandoffProof
 - Verified workflows: 0/2 (`CSV -> reconciliation -> dashboard`, `Typeform -> HubSpot shadow check`)
-- Completed tasks: 4/9
-- Working application: workspace, CSV imports, evidence, and immutable rules are usable
+- Completed tasks: 5/9
+- Working application: complete CSV workflow is usable through the API
 
 ## Completed and verified
 
@@ -20,10 +20,12 @@
   constraints, the initial migration, and deterministic synthetic fixtures.
 - Task 03 implemented demo workspaces, strict source/destination CSV imports,
   row evidence and stable errors, coverage counts, idempotency, and versioned rules.
+- Task 04 implemented deterministic reconciliation, atomic/idempotent runs, ranked
+  candidates, evidence, filters, reviews, and safe CSV export.
 
 ## In progress
 
-- Task 04 deterministic reconciliation and result APIs have not started.
+- Task 05 reviewer dashboard has not started.
 
 ## Blockers
 
@@ -51,9 +53,10 @@
 - `make check`: passed with 16 backend tests, backend lint/types/schema checks,
   1 frontend test, frontend lint/types, and a production build. The Task 05 suite
   remains intentionally skipped.
+- Task 04 focused checks passed 28 backend tests, Ruff, mypy, and Alembic drift.
 
 ## Next three actions
 
-1. Implement pure typed normalization and deterministic classification branches.
-2. Persist idempotent runs, candidates, field-level evidence, and exact counts.
-3. Add summary, results, review, and CSV export endpoints with integration tests.
+1. Build the guided source/destination upload and rule form.
+2. Display truthful coverage, category summaries, filters, and evidence details.
+3. Add review/export actions and test loading, empty, partial, and error states.
