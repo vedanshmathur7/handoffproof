@@ -10,7 +10,8 @@ Later: scheduler -> worker -> read-only Typeform/HubSpot connectors
 
 FastAPI, React, and PostgreSQL are runnable. The workspace, CSV import, validation,
 normalization, evidence, immutable-rule flow, deterministic reconciliation,
-reviews, and export are implemented. The reviewer dashboard is next.
+reviews, export, and the complete reviewer dashboard are implemented. Read-only live
+connectors are next.
 
 ## Boundaries
 

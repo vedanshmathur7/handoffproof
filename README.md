@@ -6,10 +6,11 @@ Example: a form accepted 100 submissions. HandoffProof verifies which eligible s
 
 ## Current repository state
 
-The runnable foundation and versioned PostgreSQL schema exist. Health checks,
-workspace isolation, deterministic CSV fixtures, tests, linting, type checking, and
-production frontend builds are verified. CSV import APIs and reconciliation behavior
-have not been implemented. Start with
+The complete CSV workflow is implemented and browser-verified: workspace bootstrap,
+strict imports, immutable rules, deterministic reconciliation, evidence, reviews,
+filters, and safe export. The dashboard includes the canonical checked-in sample CSVs
+for a no-setup interview demo. Live Typeform and HubSpot shadow connectors are next.
+Start with
 [docs/STATUS.md](docs/STATUS.md), then follow [docs/PLAN.md](docs/PLAN.md).
 
 ## Stack

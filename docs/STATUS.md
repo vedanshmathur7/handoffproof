@@ -1,11 +1,11 @@
 # Current status
 
-- Current phase: Frontend
-- Active task: `tasks/05-dashboard.md`
+- Current phase: Live integration
+- Active task: `tasks/06-live-connectors.md`
 - Working name: HandoffProof
-- Verified workflows: 0/2 (`CSV -> reconciliation -> dashboard`, `Typeform -> HubSpot shadow check`)
-- Completed tasks: 5/9
-- Working application: complete CSV workflow is usable through the API
+- Verified workflows: 1/2 (`CSV -> reconciliation -> dashboard`, `Typeform -> HubSpot shadow check`)
+- Completed tasks: 6/9
+- Working application: complete CSV workflow is usable through the browser and API
 
 ## Completed and verified
 
@@ -22,10 +22,12 @@
   row evidence and stable errors, coverage counts, idempotency, and versioned rules.
 - Task 04 implemented deterministic reconciliation, atomic/idempotent runs, ranked
   candidates, evidence, filters, reviews, and safe CSV export.
+- Task 05 implemented the guided reviewer dashboard, canonical sample buttons,
+  coverage warnings, filters, evidence inspection, review notes, and export access.
 
 ## In progress
 
-- Task 05 reviewer dashboard has not started.
+- Task 06 read-only Typeform and HubSpot connectors has not started.
 
 ## Blockers
 
@@ -54,9 +56,13 @@
   1 frontend test, frontend lint/types, and a production build. The Task 05 suite
   remains intentionally skipped.
 - Task 04 focused checks passed 28 backend tests, Ruff, mypy, and Alembic drift.
+- Task 05 frontend checks passed 5 tests, ESLint, TypeScript, and production build.
+- Chrome completed the sample workflow with 6 accepted source rows, 4 accepted
+  destination rows, and counts 1 matched, 2 missing, 1 duplicate, 1 mismatch,
+  1 excluded, and 0 unknown. Evidence and an append-only review were visible.
 
 ## Next three actions
 
-1. Build the guided source/destination upload and rule form.
-2. Display truthful coverage, category summaries, filters, and evidence details.
-3. Add review/export actions and test loading, empty, partial, and error states.
+1. Implement read-only Typeform and HubSpot connector interfaces and fakes.
+2. Add checkpointed incremental sync with retry/backoff and coverage tracking.
+3. Run the connector fixtures through the same deterministic reconciliation engine.

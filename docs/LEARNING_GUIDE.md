@@ -281,3 +281,70 @@ evidence. A human note can be added later, but it cannot rewrite that machine re
 - HTTP endpoints: `backend/app/api/reconciliations.py`
 - Pure tests: `backend/tests/test_matching.py`
 - API integration tests: `backend/tests/test_reconciliation_api.py`
+
+## Phase 5: Reviewer dashboard
+
+### Simple explanation
+
+We turned the working engine into a guided product an interviewer can use without
+Swagger or terminal commands.
+
+The screen behaves like a four-stop checklist: create a private workspace, bring
+the two CSV sides, write the comparison rule, then inspect evidence. Checked-in
+sample buttons make the demo repeatable. Each result shows exactly why the machine
+chose its category, and a review note adds context without erasing that answer.
+
+Example: selecting `SRC_MISMATCH` shows the original source company, the destination
+candidate's company, the normalized difference, and rule version 1 on one screen.
+
+### Technical flow
+
+1. React creates a local demo workspace on first render and exposes a retry state.
+2. Typed API client functions send multipart imports and JSON rule/run requests.
+3. The import wizard reports detected fields, counts, coverage, and row errors.
+4. Rule controls are derived from source and destination schemas returned by the API.
+5. Starting a run generates a client idempotency key and then loads result page 1.
+6. Summary cards render backend counts; partial/failed coverage adds a prominent
+   warning that the run cannot be treated as healthy.
+7. Category filters request server-filtered results instead of recomputing truth.
+8. The detail panel renders source evidence, candidates, differences, rule, and notes.
+9. Review submission appends the returned note locally while preserving machine data.
+10. Responsive CSS keeps the workflow usable on wide and narrow screens.
+
+### Concepts to learn
+
+- React component and state design
+- Controlled forms and file inputs
+- Multipart requests with `FormData`
+- Typed fetch clients and structured API errors
+- Progressive disclosure in multi-step workflows
+- Loading, empty, partial, success, error, and retry states
+- Server state versus local UI state
+- Accessible labels, headings, alerts, and native controls
+- Responsive CSS Grid and media queries
+- Integration testing with mocked Fetch and React Testing Library
+- Browser acceptance testing
+
+### Search keywords
+
+- `React TypeScript controlled form tutorial`
+- `FormData file upload fetch TypeScript`
+- `typed API client fetch error handling`
+- `multi step wizard UX progressive disclosure`
+- `React loading empty error retry states`
+- `server state vs client state React`
+- `accessible form labels aria alert heading hierarchy`
+- `CSS Grid responsive dashboard`
+- `React Testing Library file upload mocked fetch`
+- `end to end browser acceptance testing`
+
+### Files worth reading
+
+- Page orchestration: `frontend/src/App.tsx`
+- Typed HTTP client: `frontend/src/api/client.ts`
+- API-facing types: `frontend/src/types/reconciliation.ts`
+- Upload/rule workflow: `frontend/src/features/imports/ImportWizard.tsx`
+- Summary and coverage warning: `frontend/src/features/reconciliations/Summary.tsx`
+- Results and filters: `frontend/src/features/reconciliations/ExceptionList.tsx`
+- Evidence and reviews: `frontend/src/features/reconciliations/EvidenceDetail.tsx`
+- UI integration tests: `frontend/tests/reconciliation-flow.test.tsx`

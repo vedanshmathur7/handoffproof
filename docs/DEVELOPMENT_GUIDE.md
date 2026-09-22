@@ -31,4 +31,6 @@
 - `make frontend-check`: run frontend tests, linting, type checking, and build.
 - `make check`: run both complete check suites.
 
-`make demo` points to the checked-in synthetic fixtures. API loading arrives in Task 03.
+`make demo` points to the local API docs. The browser dashboard also exposes
+`Use checked-in sample CSV` for both imports, so the complete workflow can be run
+without locating fixture files manually.
