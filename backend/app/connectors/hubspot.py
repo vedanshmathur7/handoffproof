@@ -1,8 +1,9 @@
+import asyncio
 from datetime import datetime
 
 import httpx
 
-from app.connectors.http import ReadOnlyJsonClient
+from app.connectors.http import ReadOnlyJsonClient, Sleep
 from app.connectors.models import (
     ConnectorError,
     ConnectorProvider,
@@ -13,16 +14,26 @@ from app.models import CoverageStatus, ImportKind
 from app.services.imports import parse_timestamp
 
 HUBSPOT_PROPERTIES = "email,firstname,lastname,company,region"
+# Private apps on Free/Starter get 100 requests per 10 seconds per app.
+HUBSPOT_MIN_INTERVAL_SECONDS = 0.1
 
 
 class HubSpotConnector:
     """Read-only CRM contacts client; it has no write-capable method."""
 
     def __init__(
-        self, token: str, *, transport: httpx.AsyncBaseTransport | None = None
+        self,
+        token: str,
+        *,
+        transport: httpx.AsyncBaseTransport | None = None,
+        sleep: Sleep = asyncio.sleep,
     ) -> None:
         self._http = ReadOnlyJsonClient(
-            base_url="https://api.hubapi.com", token=token, transport=transport
+            base_url="https://api.hubapi.com",
+            token=token,
+            transport=transport,
+            min_interval_seconds=HUBSPOT_MIN_INTERVAL_SECONDS,
+            sleep=sleep,
         )
 
     async def read_contacts(self) -> ConnectorSnapshot:

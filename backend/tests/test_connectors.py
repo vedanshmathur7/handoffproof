@@ -14,9 +14,14 @@ from app.services.imports import create_connector_import, create_rule
 from app.services.reconciliation import create_reconciliation
 
 
+async def no_sleep(_seconds: float) -> None:
+    return None
+
+
 def typeform_response(response_id: str, submitted_at: str) -> dict[str, Any]:
     return {
         "response_id": response_id,
+        "token": f"token-{response_id}",
         "submitted_at": submitted_at,
         "answers": [
             {"field": {"ref": "email"}, "email": f"{response_id}@example.test"},
@@ -54,7 +59,11 @@ async def test_typeform_uses_read_only_pagination_overlap_and_deduplication() ->
         )
 
     snapshot = await TypeformConnector(
-        "not-a-real-token", transport=httpx.MockTransport(handler), page_size=2
+        "not-a-real-token",
+        transport=httpx.MockTransport(handler),
+        page_size=2,
+        sleep=no_sleep,
+        now=lambda: datetime(2026, 9, 1, 13, 0, tzinfo=UTC),
     ).read_responses(
         form_id="form-1",
         field_refs={
@@ -75,8 +84,10 @@ async def test_typeform_uses_read_only_pagination_overlap_and_deduplication() ->
     assert snapshot.records[0].fields["transfer_enabled"] == "true"
     assert all(request.method == "GET" for request in requests)
     assert requests[0].url.params["page_size"] == "2"
-    assert requests[0].url.params["since"] == "2026-09-01T11:55:00Z"
-    assert requests[1].url.params["before"] == "tf-2"
+    assert requests[0].url.params["since"] == "2026-09-01T11:55:00"
+    assert requests[1].url.params["before"] == "token-tf-2"
+    # The checkpoint stops 30 minutes before the read to cover indexing delay.
+    assert snapshot.watermark == datetime(2026, 9, 1, 12, 30, tzinfo=UTC)
 
 
 @pytest.mark.anyio
@@ -107,8 +118,13 @@ async def test_hubspot_later_throttling_becomes_partial_coverage() -> None:
             )
         return httpx.Response(429, json={"message": "slow down"})
 
+    delays: list[float] = []
+
+    async def record_sleep(seconds: float) -> None:
+        delays.append(seconds)
+
     snapshot = await HubSpotConnector(
-        "not-a-real-token", transport=httpx.MockTransport(handler)
+        "not-a-real-token", transport=httpx.MockTransport(handler), sleep=record_sleep
     ).read_contacts()
 
     assert snapshot.coverage == CoverageStatus.PARTIAL
@@ -118,6 +134,7 @@ async def test_hubspot_later_throttling_becomes_partial_coverage() -> None:
     assert len(requests) == 3  # one page plus bounded retry attempts
     assert all(request.method == "GET" for request in requests)
     assert requests[1].url.params["after"] == "cursor-1"
+    assert 1.0 in delays  # retry waited for backoff instead of hammering
 
 
 @pytest.mark.anyio
@@ -127,18 +144,21 @@ async def test_bad_or_expired_typeform_reads_cannot_be_healthy() -> None:
         transport=httpx.MockTransport(
             lambda _request: httpx.Response(200, json={"items": [{"bad": "row"}]})
         ),
+        sleep=no_sleep,
     ).read_responses(form_id="form-1", field_refs={}, since=None)
     expired = await TypeformConnector(
         "not-a-real-token",
         transport=httpx.MockTransport(
             lambda _request: httpx.Response(401, json={"message": "expired"})
         ),
+        sleep=no_sleep,
     ).read_responses(form_id="form-1", field_refs={}, since=None)
 
     assert malformed.coverage == CoverageStatus.PARTIAL
     assert malformed.issues == ("CONNECTOR_MALFORMED_RECORD",)
     assert expired.coverage == CoverageStatus.FAILED
     assert expired.issues == ("CONNECTOR_AUTH_FAILED",)
+    assert expired.watermark is None
 
 
 @pytest.mark.anyio

@@ -1,9 +1,11 @@
+import asyncio
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import httpx
 
-from app.connectors.http import ReadOnlyJsonClient
+from app.connectors.http import ReadOnlyJsonClient, Sleep
 from app.connectors.models import (
     ConnectorError,
     ConnectorProvider,
@@ -12,6 +14,12 @@ from app.connectors.models import (
 )
 from app.models import CoverageStatus, ImportKind
 from app.services.imports import parse_timestamp
+
+# Typeform documents that responses from roughly the last 30 minutes may not be
+# returned yet, so the checkpoint never advances past this boundary.
+TYPEFORM_INDEXING_DELAY = timedelta(minutes=30)
+# Typeform allows two Responses API requests per second per account.
+TYPEFORM_MIN_INTERVAL_SECONDS = 0.5
 
 
 class TypeformConnector:
@@ -23,13 +31,20 @@ class TypeformConnector:
         *,
         transport: httpx.AsyncBaseTransport | None = None,
         page_size: int = 1000,
+        sleep: Sleep = asyncio.sleep,
+        now: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         if page_size < 1 or page_size > 1000:
             raise ValueError("Typeform page size must be between 1 and 1000.")
         self._http = ReadOnlyJsonClient(
-            base_url="https://api.typeform.com", token=token, transport=transport
+            base_url="https://api.typeform.com",
+            token=token,
+            transport=transport,
+            min_interval_seconds=TYPEFORM_MIN_INTERVAL_SECONDS,
+            sleep=sleep,
         )
         self._page_size = page_size
+        self._now = now
 
     async def read_responses(
         self,
@@ -41,14 +56,17 @@ class TypeformConnector:
     ) -> ConnectorSnapshot:
         if since is not None and since.tzinfo is None:
             raise ValueError("Typeform checkpoint must be timezone-aware.")
+        read_at = self._now()
         params: dict[str, str | int] = {"page_size": self._page_size}
         if since is not None:
             start = since.astimezone(UTC) - timedelta(seconds=overlap_seconds)
-            params["since"] = start.isoformat().replace("+00:00", "Z")
+            params["since"] = start.strftime("%Y-%m-%dT%H:%M:%S")
+        safe_boundary = read_at - TYPEFORM_INDEXING_DELAY
+        if since is not None and since > safe_boundary:
+            safe_boundary = since
 
         records: list[ConnectorRecord] = []
         seen: set[str] = set()
-        latest: datetime | None = None
         before: str | None = None
         malformed = False
         try:
@@ -71,27 +89,16 @@ class TypeformConnector:
                     elif record.external_record_id not in seen:
                         seen.add(record.external_record_id)
                         records.append(record)
-                        if record.observed_at is not None and (
-                            latest is None or record.observed_at > latest
-                        ):
-                            latest = record.observed_at
                 if len(items) < self._page_size:
                     break
-                last = items[-1]
-                if not isinstance(last, dict) or not isinstance(
-                    last.get("response_id"), str
-                ):
-                    raise ConnectorError(
-                        "CONNECTOR_RESPONSE_INVALID", "Typeform page has no cursor."
-                    )
-                before = last["response_id"]
+                before = _cursor(items[-1])
         except ConnectorError as exc:
             return ConnectorSnapshot(
                 provider=ConnectorProvider.TYPEFORM,
                 kind=ImportKind.SOURCE,
                 records=tuple(records),
                 coverage=CoverageStatus.PARTIAL if records else CoverageStatus.FAILED,
-                watermark=latest,
+                watermark=None,
                 continuation=before,
                 issues=(exc.code,),
             )
@@ -102,7 +109,7 @@ class TypeformConnector:
             coverage=(
                 CoverageStatus.PARTIAL if malformed else CoverageStatus.COMPLETE
             ),
-            watermark=latest,
+            watermark=safe_boundary,
             issues=("CONNECTOR_MALFORMED_RECORD",) if malformed else (),
         )
 
@@ -138,6 +145,16 @@ class TypeformConnector:
             observed_at=parse_timestamp(submitted_at),
             original_evidence={"provider": "typeform", "response": item},
         )
+
+
+def _cursor(item: object) -> str:
+    """Typeform paginates with the response ``token``; response_id is a fallback."""
+    if isinstance(item, dict):
+        for key in ("token", "response_id"):
+            value = item.get(key)
+            if isinstance(value, str) and value:
+                return value
+    raise ConnectorError("CONNECTOR_RESPONSE_INVALID", "Typeform page has no cursor.")
 
 
 def _answer_value(answer: dict[str, Any]) -> str | None:

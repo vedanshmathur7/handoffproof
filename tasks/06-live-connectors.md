@@ -7,7 +7,7 @@ Reuse the engine with one live, read-only handoff.
 ## Steps
 
 - [ ] Confirm test accounts and least-privilege read scopes.
-- [ ] Verify current official pagination, rate limits, indexing delay, retention, and token behavior.
+- [x] Verify current official pagination, rate limits, indexing delay, retention, and token behavior.
 - [x] Define connector output using the same normalized contract as CSV.
 - [x] Implement Typeform polling with overlap and deduplication.
 - [x] Implement HubSpot reads with pagination and coverage watermarks.

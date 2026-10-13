@@ -51,3 +51,28 @@ checkpoints, and a consented live manual audit remain unfinished.
 ## Later background work
 
 Celery and Redis are planned for scheduled reads. PostgreSQL remains the durable record of jobs, watermarks, observations, and results.
+
+## Provider behavior (official docs checked 2026-10-13)
+
+| Topic | Typeform Responses API | HubSpot CRM contacts (private app) |
+| --- | --- | --- |
+| Read endpoint | `GET /forms/{form_id}/responses` | `GET /crm/v3/objects/contacts` |
+| Least-privilege scope | `responses:read` (`forms:read` only to list forms) | `crm.objects.contacts.read` |
+| Pagination | `page_size` default 25, max 1000; `before` takes the last item's `token` (exclusive); `since`/`until` are inclusive ISO 8601 UTC to the second | `limit` max 100; `paging.next.after` is passed back as `after` |
+| Rate limit | 2 requests/second per account | 100/10s per app (Free/Starter), 190/10s (Pro/Enterprise); daily limit shared per account; 429 for all calls once exceeded |
+| Indexing delay | Responses from roughly the last 30 minutes may not be returned | List endpoint is not documented as delayed; Search is (and is capped at 5 req/s and 10,000 results), so it is not used |
+| Retention | No automatic expiry; deleted responses and forms are permanently gone | Deleted contacts are archived, restorable for 90 days, and excluded from the default list |
+| Tokens | Personal access token or OAuth token (`offline` scope for refresh) | Private app token, Bearer header; no fixed expiry, rotation expires the old token (immediately or after 7 days), rotation recommended every 6 months |
+
+Implementation consequences:
+
+- Clients space requests (Typeform 0.5 s, HubSpot 0.1 s) and wait for
+  `Retry-After` or a capped backoff before their single bounded retry.
+- The Typeform checkpoint never advances past `read time - 30 minutes`; the next
+  read starts five minutes before that checkpoint and deduplicates by response ID.
+- Expired, rotated, or revoked tokens surface as `CONNECTOR_AUTH_FAILED` and
+  failed coverage.
+
+Sources: typeform.com/developers (responses reference, walkthroughs, get-started,
+scopes); developers.hubspot.com/docs (usage-details, crm/contacts, crm/search,
+private-apps, delete-contact reference); Typeform help article 360040196472.

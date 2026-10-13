@@ -31,6 +31,10 @@
   five-minute overlap window and response-ID deduplication; HubSpot follows its
   cursor pagination. Both convert provider records into the existing normalized
   import contract before reconciliation.
+- Official Typeform and HubSpot behavior was verified on 2026-10-13 and recorded
+  in `docs/ARCHITECTURE.md`. Typeform pages by response `token`, its checkpoint
+  stops 30 minutes before read time for indexing delay, and both clients space
+  requests and honor `Retry-After` within bounded retries.
 - Connector mocks prove bounded retry, throttling to partial coverage, no
   write-capable HTTP method, and a Typeform-to-HubSpot snapshot reaching the same
   deterministic engine as CSV imports.
@@ -73,6 +77,10 @@
   database-backed engine-contract test; no live provider request was sent.
 - Full `make check` passed on 2026-10-13: 32 backend tests, Alembic drift check,
   backend lint/types, 5 frontend tests, frontend lint/types, and production build.
+
+- Provider-verification checks on 2026-10-13: 4 connector tests, then full
+  `make check` (32 backend tests, Alembic drift, Ruff, mypy, 5 frontend tests,
+  ESLint, TypeScript, production build) passed.
 
 ## Next three actions
 
