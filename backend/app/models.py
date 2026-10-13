@@ -410,3 +410,66 @@ class Connector(Base, TimestampMixin):
             f"Connector(id={self.id!r}, provider={self.provider!r}, "
             "encrypted_credential=<redacted>)"
         )
+
+
+class ConnectorSync(Base, TimestampMixin):
+    """One manual read of a connector and the checkpoint it proved."""
+
+    __tablename__ = "connector_syncs"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["workspace_id", "connector_id"],
+            ["connectors.workspace_id", "connectors.id"],
+            name="fk_connector_syncs_workspace_connector",
+            ondelete="CASCADE",
+        ),
+        ForeignKeyConstraint(
+            ["workspace_id", "import_id"],
+            ["imports.workspace_id", "imports.id"],
+            name="fk_connector_syncs_workspace_import",
+        ),
+        UniqueConstraint(
+            "workspace_id", "id", name="uq_connector_syncs_workspace_id_id"
+        ),
+        CheckConstraint("record_count >= 0", name="nonnegative_record_count"),
+        CheckConstraint(
+            "checkpoint_after IS NULL OR coverage = 'complete'",
+            name="checkpoint_requires_complete_coverage",
+        ),
+        Index(
+            "ix_connector_syncs_workspace_connector",
+            "workspace_id",
+            "connector_id",
+            "started_at",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    workspace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False
+    )
+    connector_id: Mapped[UUID] = mapped_column(nullable=False)
+    import_id: Mapped[UUID | None] = mapped_column()
+    coverage: Mapped[CoverageStatus] = mapped_column(
+        SqlEnum(
+            CoverageStatus,
+            name="coverage_status",
+            values_callable=enum_values,
+            create_type=False,
+        ),
+        nullable=False,
+    )
+    record_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    issues: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
+    checkpoint_before: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True)
+    )
+    checkpoint_after: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    completed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )

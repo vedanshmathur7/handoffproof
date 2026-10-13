@@ -12,7 +12,7 @@ Reuse the engine with one live, read-only handoff.
 - [x] Implement Typeform polling with overlap and deduplication.
 - [x] Implement HubSpot reads with pagination and coverage watermarks.
 - [x] Encrypt credentials and exclude them from logs/responses.
-- [ ] Map throttling, incomplete pages, stale watermarks, and failures to partial/failed coverage.
+- [x] Map throttling, incomplete pages, stale watermarks, and failures to partial/failed coverage.
 - [x] Test pagination, retry bounds, throttling, malformed records, and expired credentials using mocks.
 - [ ] Add scheduling only after manual reads pass.
 - [x] Prove connectors cannot write, merge, delete, or message.

@@ -896,6 +896,145 @@
           }
         }
       }
+    },
+    "/api/v1/connectors/{connector_id}/syncs": {
+      "get": {
+        "tags": [
+          "connectors"
+        ],
+        "summary": "Get Syncs",
+        "operationId": "get_syncs_api_v1_connectors__connector_id__syncs_get",
+        "parameters": [
+          {
+            "name": "connector_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connector Id"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConnectorSyncRead"
+                  },
+                  "title": "Response Get Syncs Api V1 Connectors  Connector Id  Syncs Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/shadow-syncs": {
+      "post": {
+        "tags": [
+          "connectors"
+        ],
+        "summary": "Post Shadow Sync",
+        "description": "Manually read Typeform then HubSpot (GET only) into coverage-aware imports.",
+        "operationId": "post_shadow_sync_api_v1_shadow_syncs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShadowSyncCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShadowSyncRead"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1093,6 +1232,104 @@
           "created_at"
         ],
         "title": "ConnectorRead"
+      },
+      "ConnectorSyncRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "connector_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Connector Id"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/ConnectorProvider"
+          },
+          "import_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Import Id"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageStatus"
+          },
+          "record_count": {
+            "type": "integer",
+            "title": "Record Count"
+          },
+          "issues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Issues"
+          },
+          "checkpoint_before": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkpoint Before"
+          },
+          "checkpoint_after": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkpoint After"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Completed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspace_id",
+          "connector_id",
+          "provider",
+          "import_id",
+          "coverage",
+          "record_count",
+          "issues",
+          "checkpoint_before",
+          "checkpoint_after",
+          "started_at",
+          "completed_at"
+        ],
+        "title": "ConnectorSyncRead"
       },
       "CoverageStatus": {
         "type": "string",
@@ -1864,6 +2101,66 @@
           "failed"
         ],
         "title": "RunStatus"
+      },
+      "ShadowSyncCreate": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "source_connector_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Connector Id"
+          },
+          "destination_connector_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Connector Id"
+          },
+          "full_resync": {
+            "type": "boolean",
+            "title": "Full Resync",
+            "description": "Ignore the stored Typeform checkpoint and re-read all responses.",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "source_connector_id",
+          "destination_connector_id"
+        ],
+        "title": "ShadowSyncCreate"
+      },
+      "ShadowSyncRead": {
+        "properties": {
+          "source": {
+            "$ref": "#/components/schemas/ConnectorSyncRead"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/ConnectorSyncRead"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageStatus"
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Evaluated At",
+            "description": "Destination read start. Use it as the reconciliation evaluated_at so no source record is judged against a snapshot older than itself."
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "destination",
+          "coverage",
+          "evaluated_at"
+        ],
+        "title": "ShadowSyncRead"
       },
       "TypeformConfig": {
         "properties": {

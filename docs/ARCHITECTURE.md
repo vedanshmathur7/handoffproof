@@ -5,14 +5,17 @@
 ```text
 React UI -> FastAPI -> application services -> PostgreSQL
                  \-> deterministic reconciliation engine
-Later: scheduler -> worker -> read-only Typeform/HubSpot connectors
+React UI / API client -> POST /shadow-syncs -> read-only Typeform, then HubSpot
+                       -> imports + connector_syncs checkpoints -> same engine
+Later: scheduler -> worker -> the same shadow-sync service
 ```
 
 FastAPI, React, and PostgreSQL are runnable. The workspace, CSV import, validation,
 normalization, evidence, immutable-rule flow, deterministic reconciliation,
-reviews, export, and the complete reviewer dashboard are implemented. Task 06 now
-has read-only Typeform and HubSpot client libraries; credential wiring, persisted
-checkpoints, and a consented live manual audit remain unfinished.
+reviews, export, and the complete reviewer dashboard are implemented. Task 06 adds
+read-only Typeform and HubSpot clients, encrypted workspace-scoped credentials,
+persisted sync checkpoints, and a manual shadow-sync endpoint. A consented live
+manual audit remains unfinished.
 
 ## Boundaries
 
@@ -45,6 +48,12 @@ checkpoints, and a consented live manual audit remain unfinished.
   reconciliation run; connectors never classify a result themselves.
 - A failed first provider page produces failed coverage; a later page failure or
   throttling produces partial coverage. Both states block healthy conclusions.
+- A checkpoint advances only after a complete read and never moves backwards.
+  A Typeform checkpoint older than `CONNECTOR_CHECKPOINT_MAX_AGE_HOURS` (default
+  168) or later than the read time is stale: that read is partial and leaves the
+  checkpoint unchanged until an explicit `full_resync`.
+- Rejected provider rows (for example an invalid email) downgrade the import to
+  partial, exactly as rejected CSV rows do.
 - Connector clients expose GET requests only. Their tokens are passed only in an
   Authorization header and are never included in snapshots, errors, or logs.
 - Stored tokens are encrypted with Fernet keys from `CONNECTOR_ENCRYPTION_KEYS`

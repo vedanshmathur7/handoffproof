@@ -120,6 +120,42 @@ Replaces the encrypted token (for example after a HubSpot rotation). Body:
 `{"workspace_id": "...", "token": "..."}`. Cross-workspace IDs return
 `CONNECTOR_NOT_FOUND`.
 
+### `POST /api/v1/shadow-syncs`
+
+Manually runs one read-only shadow sync; there is no scheduler. Body:
+`workspace_id`, `source_connector_id` (Typeform), `destination_connector_id`
+(HubSpot), and optional `full_resync` (default `false`). Typeform is read first,
+from the stored checkpoint minus a five-minute overlap; HubSpot is then read in
+full. Each read becomes an ordinary import through the CSV normalization contract
+and records a `connector_syncs` row. Returns HTTP 201:
+
+```json
+{
+  "source": {"provider": "typeform", "import_id": "...", "coverage": "complete",
+             "record_count": 2, "issues": [], "checkpoint_before": null,
+             "checkpoint_after": "2026-10-13T11:30:00Z"},
+  "destination": {"provider": "hubspot", "import_id": "...", "coverage": "partial",
+                  "issues": ["CONNECTOR_THROTTLED"], "checkpoint_after": null},
+  "coverage": "partial",
+  "evaluated_at": "2026-10-13T12:00:01Z"
+}
+```
+
+Pass `evaluated_at` to `POST /api/v1/reconciliations` so no source record is judged
+against a destination snapshot taken before it. Issues include
+`CONNECTOR_AUTH_FAILED`, `CONNECTOR_THROTTLED`, `CONNECTOR_UPSTREAM_ERROR`,
+`CONNECTOR_NETWORK_ERROR`, `CONNECTOR_RESPONSE_INVALID`,
+`CONNECTOR_MALFORMED_RECORD`, and `CONNECTOR_WATERMARK_STALE`. A Typeform read with
+no new responses creates no source import. A missing destination import makes the
+overall coverage `failed`. Errors: `CONNECTOR_NOT_FOUND` (404, including another
+workspace's connector), `CONNECTOR_ROLE_INVALID` (422), and
+`CONNECTOR_CREDENTIAL_UNREADABLE` (409).
+
+### `GET /api/v1/connectors/{connector_id}/syncs?workspace_id={workspace_id}`
+
+Lists that connector's sync history, newest first, with coverage, issues, import
+IDs, and checkpoints.
+
 ## Result behavior
 
 Classification follows this fixed order: incomplete coverage, exclusion, open wait

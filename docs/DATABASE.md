@@ -23,6 +23,10 @@ later migrations in `backend/migrations/versions/` extend it.
   configuration with provider (`typeform`, `hubspot`), unique name per workspace,
   JSON config (Typeform form ID and field refs), a Fernet-encrypted credential, and
   the credential's last replacement time. Plaintext tokens are never stored.
+- `connector_syncs` (migration `ec25da27f28a`): one manual connector read with its
+  connector, optional import, coverage, record count, issue codes, the checkpoint
+  it started from, the checkpoint it proved, and start/completion times. The
+  current checkpoint is the latest non-null `checkpoint_after`.
 
 ## Implemented invariants
 
@@ -42,6 +46,9 @@ later migrations in `backend/migrations/versions/` extend it.
 - A destination observation appears at most once in a result's candidate list.
 - Candidate rank is positive.
 - Reviews add annotations without changing original evidence or machine reasons.
+- Connector names are unique inside a workspace.
+- Connector syncs reference a connector and import from the same workspace.
+- A sync can set `checkpoint_after` only when its coverage is `complete`.
 
 ## PostgreSQL enum values
 

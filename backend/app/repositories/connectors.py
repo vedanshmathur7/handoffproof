@@ -1,10 +1,11 @@
+from datetime import datetime
 from typing import cast
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Connector
+from app.models import Connector, ConnectorSync
 
 
 async def find_connector(
@@ -39,5 +40,33 @@ async def list_connectors(session: AsyncSession, workspace_id: UUID) -> list[Con
         select(Connector)
         .where(Connector.workspace_id == workspace_id)
         .order_by(Connector.created_at, Connector.id)
+    )
+    return list(rows)
+
+
+async def latest_checkpoint(
+    session: AsyncSession, workspace_id: UUID, connector_id: UUID
+) -> datetime | None:
+    return cast(
+        datetime | None,
+        await session.scalar(
+            select(func.max(ConnectorSync.checkpoint_after)).where(
+                ConnectorSync.workspace_id == workspace_id,
+                ConnectorSync.connector_id == connector_id,
+            )
+        ),
+    )
+
+
+async def list_syncs(
+    session: AsyncSession, workspace_id: UUID, connector_id: UUID
+) -> list[ConnectorSync]:
+    rows = await session.scalars(
+        select(ConnectorSync)
+        .where(
+            ConnectorSync.workspace_id == workspace_id,
+            ConnectorSync.connector_id == connector_id,
+        )
+        .order_by(ConnectorSync.started_at.desc(), ConnectorSync.id)
     )
     return list(rows)

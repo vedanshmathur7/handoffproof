@@ -38,6 +38,11 @@
 - Connector credentials are stored per workspace in `connectors`, encrypted with
   rotatable Fernet keys, never returned by the API, never echoed in validation
   errors, and absent from captured logs. Missing keys fail closed with HTTP 503.
+- `POST /api/v1/shadow-syncs` manually reads Typeform then HubSpot (GET only),
+  stores both snapshots as ordinary imports, and records workspace-scoped
+  `connector_syncs` checkpoints. Checkpoints advance only after complete reads;
+  stale checkpoints, throttling, auth failures, and missing destination data
+  produce partial or failed coverage, and the engine then returns `unknown`.
 - Connector mocks prove bounded retry, throttling to partial coverage, no
   write-capable HTTP method, and a Typeform-to-HubSpot snapshot reaching the same
   deterministic engine as CSV imports.
@@ -45,9 +50,9 @@
 ## Blockers
 
 - None for documentation validation.
-- Completing live connector work needs suitable test accounts, least-privilege
-  read-only credentials, encrypted credential storage, persisted sync checkpoints,
-  and a manual audit of consented records.
+- Completing Task 06 needs consented Typeform and HubSpot test accounts with
+  least-privilege read tokens and a manual audit of their records. These must be
+  provided by the project owner; no live result has been invented.
 
 ## Checks actually run
 
@@ -89,8 +94,14 @@
   downgrade, re-upgrade, and drift check passed; full `make check` passed with
   36 backend tests, Ruff, mypy, 5 frontend tests, ESLint, TypeScript, and build.
 
+- Shadow-sync checks on 2026-10-13: migration `ec25da27f28a` upgrade, downgrade,
+  re-upgrade, and drift check passed; 5 mocked shadow-sync API tests passed; full
+  `make check` passed with 41 backend tests, Ruff, mypy, 5 frontend tests, ESLint,
+  TypeScript, and production build. No live provider request has been sent.
+
 ## Next three actions
 
-1. Add persisted, workspace-scoped sync checkpoints with stale-watermark coverage.
-2. Wire a manual shadow-sync endpoint to the Typeform and HubSpot clients without adding scheduler work.
-3. Use consented test accounts and a manual audit to complete Task 06 acceptance.
+1. Obtain consented Typeform and HubSpot test accounts with `responses:read` and
+   `crm.objects.contacts.read` tokens, kept only in a local `.env`/API call.
+2. Run a live manual shadow sync and reconciliation on adjudicated test records.
+3. Compare product results with a manual audit and complete Task 06 acceptance.

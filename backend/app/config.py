@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     max_upload_bytes: int = 1_000_000
     # Comma-separated Fernet keys; the first encrypts, all decrypt (rotation).
     connector_encryption_keys: SecretStr | None = None
+    # Incremental checkpoints older than this need an explicit full re-read.
+    connector_checkpoint_max_age_hours: int = 168
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env"),

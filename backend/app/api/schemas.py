@@ -232,3 +232,42 @@ class ConnectorRead(BaseModel):
     credential_configured: bool
     credential_updated_at: datetime
     created_at: datetime
+
+
+class ConnectorSyncRead(BaseModel):
+    id: UUID
+    workspace_id: UUID
+    connector_id: UUID
+    provider: ConnectorProvider
+    import_id: UUID | None
+    coverage: CoverageStatus
+    record_count: int
+    issues: list[str]
+    checkpoint_before: datetime | None
+    checkpoint_after: datetime | None
+    started_at: datetime
+    completed_at: datetime
+
+
+class ShadowSyncCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    workspace_id: UUID
+    source_connector_id: UUID
+    destination_connector_id: UUID
+    full_resync: bool = Field(
+        default=False,
+        description="Ignore the stored Typeform checkpoint and re-read all responses.",
+    )
+
+
+class ShadowSyncRead(BaseModel):
+    source: ConnectorSyncRead
+    destination: ConnectorSyncRead
+    coverage: CoverageStatus
+    evaluated_at: datetime = Field(
+        description=(
+            "Destination read start. Use it as the reconciliation evaluated_at so "
+            "no source record is judged against a snapshot older than itself."
+        )
+    )
