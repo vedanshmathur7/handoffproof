@@ -35,6 +35,9 @@
   in `docs/ARCHITECTURE.md`. Typeform pages by response `token`, its checkpoint
   stops 30 minutes before read time for indexing delay, and both clients space
   requests and honor `Retry-After` within bounded retries.
+- Connector credentials are stored per workspace in `connectors`, encrypted with
+  rotatable Fernet keys, never returned by the API, never echoed in validation
+  errors, and absent from captured logs. Missing keys fail closed with HTTP 503.
 - Connector mocks prove bounded retry, throttling to partial coverage, no
   write-capable HTTP method, and a Typeform-to-HubSpot snapshot reaching the same
   deterministic engine as CSV imports.
@@ -82,8 +85,12 @@
   `make check` (32 backend tests, Alembic drift, Ruff, mypy, 5 frontend tests,
   ESLint, TypeScript, production build) passed.
 
+- Credential-storage checks on 2026-10-13: migration `13cf6b01e04d` upgrade,
+  downgrade, re-upgrade, and drift check passed; full `make check` passed with
+  36 backend tests, Ruff, mypy, 5 frontend tests, ESLint, TypeScript, and build.
+
 ## Next three actions
 
-1. Add encrypted credential configuration and persisted, workspace-scoped sync checkpoints.
+1. Add persisted, workspace-scoped sync checkpoints with stale-watermark coverage.
 2. Wire a manual shadow-sync endpoint to the Typeform and HubSpot clients without adding scheduler work.
 3. Use consented test accounts and a manual audit to complete Task 06 acceptance.

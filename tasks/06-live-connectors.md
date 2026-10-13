@@ -11,7 +11,7 @@ Reuse the engine with one live, read-only handoff.
 - [x] Define connector output using the same normalized contract as CSV.
 - [x] Implement Typeform polling with overlap and deduplication.
 - [x] Implement HubSpot reads with pagination and coverage watermarks.
-- [ ] Encrypt credentials and exclude them from logs/responses.
+- [x] Encrypt credentials and exclude them from logs/responses.
 - [ ] Map throttling, incomplete pages, stale watermarks, and failures to partial/failed coverage.
 - [x] Test pagination, retry bounds, throttling, malformed records, and expired credentials using mocks.
 - [ ] Add scheduling only after manual reads pass.

@@ -38,6 +38,9 @@ async def validation_error_handler(_request: Request, exc: Exception) -> JSONRes
         content=error_body(
             "REQUEST_VALIDATION_ERROR",
             "The request did not match the API contract.",
-            exc.errors(),
+            [
+                {key: value for key, value in error.items() if key != "input"}
+                for error in exc.errors()
+            ],
         ),
     )

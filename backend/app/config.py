@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,6 +11,8 @@ class Settings(BaseSettings):
     )
     frontend_origin: str = "http://localhost:5173"
     max_upload_bytes: int = 1_000_000
+    # Comma-separated Fernet keys; the first encrypts, all decrypt (rotation).
+    connector_encryption_keys: SecretStr | None = None
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env"),

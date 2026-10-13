@@ -1,14 +1,15 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import StrEnum
 from typing import Any
 
-from app.models import CoverageStatus, ImportKind
+from app.models import ConnectorProvider, CoverageStatus, ImportKind
 
-
-class ConnectorProvider(StrEnum):
-    TYPEFORM = "typeform"
-    HUBSPOT = "hubspot"
+__all__ = [
+    "ConnectorError",
+    "ConnectorProvider",
+    "ConnectorRecord",
+    "ConnectorSnapshot",
+]
 
 
 @dataclass(frozen=True)

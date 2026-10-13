@@ -47,6 +47,9 @@ checkpoints, and a consented live manual audit remain unfinished.
   throttling produces partial coverage. Both states block healthy conclusions.
 - Connector clients expose GET requests only. Their tokens are passed only in an
   Authorization header and are never included in snapshots, errors, or logs.
+- Stored tokens are encrypted with Fernet keys from `CONNECTOR_ENCRYPTION_KEYS`
+  (MultiFernet: the first key encrypts, every listed key decrypts, enabling key
+  rotation). Without a valid key, credential operations fail closed with HTTP 503.
 
 ## Later background work
 

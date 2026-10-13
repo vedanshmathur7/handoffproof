@@ -2,9 +2,10 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from app.models import (
+    ConnectorProvider,
     CoverageStatus,
     ImportKind,
     ImportStatus,
@@ -179,3 +180,55 @@ class ResultPage(BaseModel):
     total: int
     offset: int
     limit: int
+
+
+TYPEFORM_REQUIRED_FIELDS = (
+    "email",
+    "full_name",
+    "company",
+    "region",
+    "transfer_enabled",
+)
+
+
+class TypeformConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    form_id: str = Field(pattern=r"^[A-Za-z0-9]{1,64}$", examples=["abc123XY"])
+    field_refs: dict[str, str] = Field(
+        description="Maps each normalized source field to a Typeform field ref.",
+        examples=[{name: name for name in TYPEFORM_REQUIRED_FIELDS}],
+    )
+
+
+class ConnectorCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    workspace_id: UUID
+    provider: ConnectorProvider
+    name: str = Field(min_length=1, max_length=200)
+    token: SecretStr = Field(
+        min_length=8,
+        max_length=4096,
+        description="Write-only read-scoped token. It is encrypted and never returned.",
+    )
+    typeform: TypeformConfig | None = None
+
+
+class CredentialReplace(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    workspace_id: UUID
+    token: SecretStr = Field(min_length=8, max_length=4096)
+
+
+class ConnectorRead(BaseModel):
+    id: UUID
+    workspace_id: UUID
+    provider: ConnectorProvider
+    kind: ImportKind
+    name: str
+    config: dict[str, Any]
+    credential_configured: bool
+    credential_updated_at: datetime
+    created_at: datetime

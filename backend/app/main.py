@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.connectors import router as connectors_router
 from app.api.errors import ApiError, api_error_handler, validation_error_handler
 from app.api.health import router as health_router
 from app.api.imports import router as imports_router
@@ -25,3 +26,4 @@ app.include_router(health_router)
 app.include_router(workspaces_router)
 app.include_router(imports_router)
 app.include_router(reconciliations_router)
+app.include_router(connectors_router)

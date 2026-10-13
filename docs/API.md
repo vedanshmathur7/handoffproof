@@ -98,6 +98,28 @@ reason, or evidence.
 Downloads a CSV containing source ID, category, reason, candidate IDs, differences,
 and rule version. Formula-like values are escaped to prevent spreadsheet execution.
 
+### `POST /api/v1/connectors`
+
+Stores a read-only provider configuration in one workspace. The body contains
+`workspace_id`, `provider` (`typeform` or `hubspot`), a unique `name`, a write-only
+`token`, and, for Typeform only, `typeform.form_id` plus `typeform.field_refs` mapping
+exactly `email`, `full_name`, `company`, `region`, and `transfer_enabled` to form
+field refs. Typeform connectors are source data; HubSpot connectors are destination
+data. Returns HTTP 201 with `credential_configured: true`; the token is never
+returned. Errors: `CONNECTOR_CONFIG_INVALID` (422), `CONNECTOR_NAME_TAKEN` (409),
+`WORKSPACE_NOT_FOUND` (404), and `CONNECTOR_ENCRYPTION_NOT_CONFIGURED` (503) when
+`CONNECTOR_ENCRYPTION_KEYS` is unset or invalid.
+
+### `GET /api/v1/connectors?workspace_id={workspace_id}`
+
+Lists the workspace's connectors without credentials.
+
+### `PUT /api/v1/connectors/{connector_id}/credential`
+
+Replaces the encrypted token (for example after a HubSpot rotation). Body:
+`{"workspace_id": "...", "token": "..."}`. Cross-workspace IDs return
+`CONNECTOR_NOT_FOUND`.
+
 ## Result behavior
 
 Classification follows this fixed order: incomplete coverage, exclusion, open wait
@@ -123,4 +145,5 @@ fixture returns six `unknown` results because the whole destination snapshot is
 untrustworthy.
 
 Implemented validation errors contain a stable `code`, human-readable `message`,
-and optional `details`. Request IDs are deferred to Task 07 observability.
+and optional `details`. Request-validation details never echo submitted input, so
+a malformed request cannot reflect a credential back. Request IDs are deferred to Task 07 observability.

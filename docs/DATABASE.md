@@ -1,6 +1,7 @@
 # Database contract
 
-Migration `eb584a4dd816` is authoritative for the initial PostgreSQL schema.
+Migration `eb584a4dd816` is authoritative for the initial PostgreSQL schema;
+later migrations in `backend/migrations/versions/` extend it.
 
 ## Implemented entities
 
@@ -18,7 +19,10 @@ Migration `eb584a4dd816` is authoritative for the initial PostgreSQL schema.
 - `result_candidates`: ranked destination observations considered for a result.
 - `reviews`: append-only reviewer annotations linked to the original result.
 
-`connectors` and `sync_jobs` remain deferred until the CSV workflow works.
+- `connectors` (migration `13cf6b01e04d`): workspace-scoped read-only provider
+  configuration with provider (`typeform`, `hubspot`), unique name per workspace,
+  JSON config (Typeform form ID and field refs), a Fernet-encrypted credential, and
+  the credential's last replacement time. Plaintext tokens are never stored.
 
 ## Implemented invariants
 
@@ -41,6 +45,7 @@ Migration `eb584a4dd816` is authoritative for the initial PostgreSQL schema.
 
 ## PostgreSQL enum values
 
+- Connector provider: `typeform`, `hubspot`
 - Import kind: `source`, `destination`
 - Coverage: `complete`, `partial`, `failed`
 - Import status: `pending`, `completed`, `failed`

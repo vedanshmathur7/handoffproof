@@ -11,6 +11,7 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     Index,
     Integer,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -57,6 +58,11 @@ class ResultCategory(StrEnum):
     FIELD_MISMATCH = "field_mismatch"
     EXCLUDED = "excluded"
     UNKNOWN = "unknown"
+
+
+class ConnectorProvider(StrEnum):
+    TYPEFORM = "typeform"
+    HUBSPOT = "hubspot"
 
 
 def enum_values(enum_type: type[Enum]) -> list[str]:
@@ -367,3 +373,40 @@ class Review(Base, TimestampMixin):
     result_id: Mapped[UUID] = mapped_column(nullable=False)
     reviewer: Mapped[str] = mapped_column(String(200), nullable=False)
     annotation: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class Connector(Base, TimestampMixin):
+    """Read-only provider configuration with an encrypted credential."""
+
+    __tablename__ = "connectors"
+    __table_args__ = (
+        UniqueConstraint("workspace_id", "id", name="uq_connectors_workspace_id_id"),
+        UniqueConstraint("workspace_id", "name", name="uq_connectors_workspace_name"),
+    )
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    workspace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False
+    )
+    provider: Mapped[ConnectorProvider] = mapped_column(
+        SqlEnum(
+            ConnectorProvider,
+            name="connector_provider",
+            values_callable=enum_values,
+        ),
+        nullable=False,
+    )
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    config: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+    encrypted_credential: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    credential_updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"Connector(id={self.id!r}, provider={self.provider!r}, "
+            "encrypted_credential=<redacted>)"
+        )
