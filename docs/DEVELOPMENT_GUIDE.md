@@ -34,3 +34,20 @@
 `make demo` points to the local API docs. The browser dashboard also exposes
 `Use checked-in sample CSV` for both imports, so the complete workflow can be run
 without locating fixture files manually.
+
+## Live shadow check (Task 06, manual)
+
+Use only consented test accounts and synthetic leads. Never commit tokens or exports.
+
+1. Put a generated Fernet key in the local `.env` as `CONNECTOR_ENCRYPTION_KEYS`.
+2. Typeform: create a personal access token with only `responses:read`. HubSpot:
+   create a private app with only `crm.objects.contacts.read`.
+3. Start the API (`make backend-dev`), create a workspace, then `POST
+   /api/v1/connectors` once for Typeform (with `form_id` and `field_refs`) and once
+   for HubSpot. Tokens go only in those request bodies.
+4. Wait at least 30 minutes after the last test submission (Typeform indexing delay),
+   then `POST /api/v1/shadow-syncs` with `full_resync: true`.
+5. Create a rule from the two returned import IDs and run `POST
+   /api/v1/reconciliations` with the returned `evaluated_at`.
+6. Before looking at the product results, write a manual audit sheet: one expected
+   category per test response. Then compare it row by row with the export.

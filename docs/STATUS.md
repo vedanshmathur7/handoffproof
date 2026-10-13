@@ -85,15 +85,12 @@
   database-backed engine-contract test; no live provider request was sent.
 - Full `make check` passed on 2026-10-13: 32 backend tests, Alembic drift check,
   backend lint/types, 5 frontend tests, frontend lint/types, and production build.
-
 - Provider-verification checks on 2026-10-13: 4 connector tests, then full
   `make check` (32 backend tests, Alembic drift, Ruff, mypy, 5 frontend tests,
   ESLint, TypeScript, production build) passed.
-
 - Credential-storage checks on 2026-10-13: migration `13cf6b01e04d` upgrade,
   downgrade, re-upgrade, and drift check passed; full `make check` passed with
   36 backend tests, Ruff, mypy, 5 frontend tests, ESLint, TypeScript, and build.
-
 - Shadow-sync checks on 2026-10-13: migration `ec25da27f28a` upgrade, downgrade,
   re-upgrade, and drift check passed; 5 mocked shadow-sync API tests passed; full
   `make check` passed with 41 backend tests, Ruff, mypy, 5 frontend tests, ESLint,
