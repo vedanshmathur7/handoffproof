@@ -27,12 +27,20 @@
 
 ## In progress
 
-- Task 06 read-only Typeform and HubSpot connectors has not started.
+- Task 06 has an in-process read-only connector foundation. Typeform uses a
+  five-minute overlap window and response-ID deduplication; HubSpot follows its
+  cursor pagination. Both convert provider records into the existing normalized
+  import contract before reconciliation.
+- Connector mocks prove bounded retry, throttling to partial coverage, no
+  write-capable HTTP method, and a Typeform-to-HubSpot snapshot reaching the same
+  deterministic engine as CSV imports.
 
 ## Blockers
 
 - None for documentation validation.
-- Live connector work will later need suitable test accounts and read-only credentials.
+- Completing live connector work needs suitable test accounts, least-privilege
+  read-only credentials, encrypted credential storage, persisted sync checkpoints,
+  and a manual audit of consented records.
 
 ## Checks actually run
 
@@ -60,9 +68,14 @@
 - Chrome completed the sample workflow with 6 accepted source rows, 4 accepted
   destination rows, and counts 1 matched, 2 missing, 1 duplicate, 1 mismatch,
   1 excluded, and 0 unknown. Evidence and an append-only review were visible.
+- Task 06 connector-focused checks passed on 2026-10-13: 4 mocked connector and
+  engine-contract tests, Ruff, and mypy. Local PostgreSQL was started only for the
+  database-backed engine-contract test; no live provider request was sent.
+- Full `make check` passed on 2026-10-13: 32 backend tests, Alembic drift check,
+  backend lint/types, 5 frontend tests, frontend lint/types, and production build.
 
 ## Next three actions
 
-1. Implement read-only Typeform and HubSpot connector interfaces and fakes.
-2. Add checkpointed incremental sync with retry/backoff and coverage tracking.
-3. Run the connector fixtures through the same deterministic reconciliation engine.
+1. Add encrypted credential configuration and persisted, workspace-scoped sync checkpoints.
+2. Wire a manual shadow-sync endpoint to the Typeform and HubSpot clients without adding scheduler work.
+3. Use consented test accounts and a manual audit to complete Task 06 acceptance.

@@ -1,6 +1,7 @@
 import csv
 import hashlib
 import io
+import json
 import re
 from dataclasses import dataclass
 from datetime import datetime
@@ -60,7 +61,7 @@ class ParsedRow:
     external_record_id: str
     identity_value: str | None
     normalized_data: dict[str, Any]
-    original_evidence: dict[str, str]
+    original_evidence: dict[str, Any]
     eligible: bool
     observed_at: datetime | None
     rejected_reason: str | None = None
@@ -82,7 +83,7 @@ def normalize_text(value: str) -> str:
     return " ".join(value.strip().split())
 
 
-def rejected_row(row_number: int, original: dict[str, str], reason: str) -> ParsedRow:
+def rejected_row(row_number: int, original: dict[str, Any], reason: str) -> ParsedRow:
     return ParsedRow(
         row_number=row_number,
         external_record_id=f"__rejected_row_{row_number}__",
@@ -258,15 +259,38 @@ async def create_import(
             "CSV_FILE_TOO_LARGE",
             f"CSV exceeds the {max_upload_bytes}-byte limit.",
         )
+    checksum = hashlib.sha256(content).hexdigest()
+    rows, fields, duplicate_rows = parse_csv(kind, content)
+    return await persist_import(
+        session,
+        workspace_id=workspace_id,
+        kind=kind,
+        filename=filename,
+        checksum=checksum,
+        rows=rows,
+        fields=fields,
+        duplicate_rows=duplicate_rows,
+        requested_coverage=requested_coverage,
+    )
+
+
+async def persist_import(
+    session: AsyncSession,
+    *,
+    workspace_id: UUID,
+    kind: ImportKind,
+    filename: str,
+    checksum: str,
+    rows: list[ParsedRow],
+    fields: list[str],
+    duplicate_rows: int,
+    requested_coverage: CoverageStatus,
+) -> tuple[ImportRead, bool]:
     if await lock_workspace(session, workspace_id) is None:
         raise ApiError(404, "WORKSPACE_NOT_FOUND", "Workspace was not found.")
-
-    checksum = hashlib.sha256(content).hexdigest()
     existing = await find_import_by_checksum(session, workspace_id, kind, checksum)
     if existing is not None:
         return await import_to_read(session, existing), False
-
-    rows, fields, duplicate_rows = parse_csv(kind, content)
     accepted = sum(row.rejected_reason is None for row in rows)
     rejected = len(rows) - accepted
     coverage = resolved_coverage(requested_coverage, accepted, rejected)
@@ -304,6 +328,70 @@ async def create_import(
     await session.commit()
     await session.refresh(batch)
     return await import_to_read(session, batch), True
+
+
+async def create_connector_import(
+    session: AsyncSession,
+    *,
+    workspace_id: UUID,
+    snapshot: Any,
+    filename: str,
+) -> tuple[ImportRead, bool]:
+    """Persist provider rows through the same normalized schema as CSV imports."""
+    from app.connectors.models import ConnectorSnapshot
+
+    if not isinstance(snapshot, ConnectorSnapshot):
+        raise TypeError("snapshot must be a ConnectorSnapshot")
+    kind = snapshot.kind
+    fields = expected_fields(kind)
+    seen_ids: set[str] = set()
+    rows: list[ParsedRow] = []
+    duplicate_rows = 0
+    for row_number, record in enumerate(snapshot.records, start=1):
+        parsed, duplicate = parse_row(kind, row_number, record.fields, seen_ids)
+        rows.append(
+            ParsedRow(
+                row_number=parsed.row_number,
+                external_record_id=parsed.external_record_id,
+                identity_value=parsed.identity_value,
+                normalized_data=parsed.normalized_data,
+                original_evidence=record.original_evidence,
+                eligible=parsed.eligible,
+                observed_at=parsed.observed_at,
+                rejected_reason=parsed.rejected_reason,
+            )
+        )
+        duplicate_rows += int(duplicate)
+    checksum_body = {
+        "provider": snapshot.provider.value,
+        "kind": snapshot.kind.value,
+        "records": [
+            {
+                "external_record_id": record.external_record_id,
+                "fields": record.fields,
+                "observed_at": record.observed_at.isoformat()
+                if record.observed_at is not None
+                else None,
+            }
+            for record in snapshot.records
+        ],
+        "coverage": snapshot.coverage.value,
+        "issues": snapshot.issues,
+    }
+    checksum = hashlib.sha256(
+        json.dumps(checksum_body, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    return await persist_import(
+        session,
+        workspace_id=workspace_id,
+        kind=kind,
+        filename=filename,
+        checksum=checksum,
+        rows=rows,
+        fields=fields,
+        duplicate_rows=duplicate_rows,
+        requested_coverage=snapshot.coverage,
+    )
 
 
 async def read_import(
